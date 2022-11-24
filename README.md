@@ -1,40 +1,52 @@
-🚩plugin-template
+🚩Published on logseq marketplace. 
 
-# logseq-plugin-template-js
- - Logseq plugins are mostly written in Typescript. It's not easy for beginners to learn, so I think it's better to learn **Javascript** in the beginning. Customize Logseq using `@logseq/libs`.
+# logseq-plugin-booklog_jp-import
+ - Create a booklist by import from [`booklog.jp`](https://booklog.jp/)
 
-## Required environment
-1. GitHub desktop client https://desktop.github.com/
-1. Visual Studio Code https://azure.microsoft.com/ja-jp/products/visual-studio-code/
-1. pnpm https://pnpm.io/ja/installation
-1. node.js https://pnpm.io/ja/cli/env
-
+## what can  do
+- Load a JSON file and create pages. Configure page properties.
+- To use Logseq as a booklist.
+- booklog.jp is a site from Japan.
+- ブクログ/booklog.jpのファイルエクスポートを利用し、Logseqにブックリストを作成してログを残すためのプラグイン
 
 ## How to use
- 1. Select [Use this template] → [Create a new repository]
- 1. Clone the repository on GitHub desktop client
- 1. Edit few items `LICENSE.md` and `package.json` on Visual Studio Code
- 1. Launch a terminal by contextmenu from the same folder as the repository. Run `pnpm install`
- 1. Modules is installed and the development environment is ready.
- 1. Edit the main script `src/index.js`
- 1. switch to Electron Developer Tools on Logseq (⌨️: Windows`Ctrl+Shift+I` or Mac`Cmd+Alt+I`)
- 1. Build the plugin. Run `pnpm build`
- 1. Have Logseq load the plugin in developer mode.
- 1. Commit to the Github repo on GitHub desktop client.
- 1. Release with a tag like v.1.0.0 on your repository on Github. It takes about a minute for Github CI to finish working. Then two are added to the asset.
+ 1. CSVファイルを取得 https://booklog.jp/export
+ 1. http://yu000jp.php.xdomain.jp/main/booklog/logseq/ にアップロードして、URLをコピーする
+ 1. Logseqマーケットプレイスからプラグインをインストールする
+ 1. プラグインの設定項目にURLを貼り付ける
+ 1. ツールバーにある`📚`からプラグインを実行する
+ 1. ネット上に作成されたJSONファイルが読み込まれ、Logseqにページが作成される
+ 1. `本/〇〇〇〇`という形式で、作成される
+ 1. 左サイドバーの`全ページ`を開き、今回作成されたページファイルを確認する
+ 1. Logseqにログを書き足すには、ジャーナルでタグを使う
+ 1. タグ`#[[〇〇〇〇]]`を使い、アウトラインを書く
+ 1. そのページのLinked Referencesに表示される
+ 1. ページを開いてログを探す
+ 
+ ## Tips
+ - `本`というページを開くとHierarchyと呼ぶリンクが表示される
+ - リンクだけではなくページタグやAdvanced Queryからも各ページへアクセスできる
+ 
+ ## Attention
+ - ツールバーから実行すると古いページファイルがいったん削除される
+ - ページに直接書かないようにしてください
+ - 必ずタグ(リンク)をつけてログを残してください
+ 
+ --- 
+ 
+ ## Plugin develop
+ - まだ自分自身の技術不足があり、今回の方法で公開します。
+ - 多くのLogseqプラグインは、Javascriptやnode.js、Typescript、Reactなどの技術で作成されています。
+ - 今回は別のウェブサイトをつくり、サーバーサイドのPHPスクリプトで必要な処理をおこないます。
+ 
+ ### TODO List
+ 1. add `古いページファイルを削除しない`
+ 1. LogseqにCSVファイルをアップロードできるようにする(その後の処理も)
 
-## How to publish
- - Once the plugin is complete, publish it to Logseq marketplace.
- 1. Fork logseq/marketplace repository. https://github.com/logseq/marketplace
- 1. In your forked repository, upload the required folders to `package` directory. 
-    - `manifest.json` https://github.com/logseq/marketplace/blob/master/packages/logseq-dev-theme/manifest.json
-    - `icon.png` or other `icon.svg`
- 1. Make a pull request. After posting, wait a few days for a response. They are checked, merged and published.
 
-## Imported SDK
+### Imported SDK
  - @logseq/libs https://logseq.github.io/plugins/
- - logseq-dateutils https://github.com/hkgnp/logseq-dateutils
 
-## Credit
+### Credit
  - https://github.com/hkgnp/logseqplugin-basic-template
  - https://github.com/YU000jp/logseq-plugin-templete-js
