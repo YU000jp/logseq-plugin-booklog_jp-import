@@ -10,38 +10,20 @@ const main = () => {
 
   settingUI(); /* -setting */
   console.info(`#${pluginId}: MAIN`); /* -plugin-id */
-  logseq.UI.showMsg(`add items at toolbar and contextmenu`); /* test message ==remove== */
 
   /* CSS */
-  logseq.provideStyle(String.raw`
-    div#test {
-      font-size: 20px;
-    }
-  `);
+  /*logseq.provideStyle(String.raw`
 
-  /* ContextMenuItem  */
-  logseq.Editor.registerBlockContextMenuItem('🟢Open at right sidebar', async ({ uuid }) => {
+  `);*/
 
-    /* todayDateInUserFormat Sample */
-    const userConfigs = await logseq.App.getUserConfigs();
-    const preferredDateFormat = userConfigs.preferredDateFormat;
-    const today = new Date();
-    const todayDateInUserFormat = getDateForPage(today, preferredDateFormat);
-    console.log(`#${pluginId}: ${todayDateInUserFormat}`);
-    /* end_sample */
-
-    logseq.App.openInRightSidebar(uuid);
-    logseq.UI.showMsg("🟢Open at right sidebar");
-    console.log(`#${pluginId}: 🟢Open at right sidebar`);
-  });
 
   /* toolbarItem */
   logseq.App.registerUIItem("toolbar", {
     key: pluginId,
     template: `
-    <div data-on-click="open_dashboard" style="font-size:20px">🔥</div>
+    <div data-on-click="open_booklog_jp" style="font-size:20px">📚</div>
     `,
-  });/* For open_dashboard */
+  });/* For open_booklog_jp */
 
   console.info(`#${pluginId}: loaded`);
 };/* end_main */
@@ -49,19 +31,8 @@ const main = () => {
 
 /* dashboard */
 const model = {
-  async open_dashboard() {
-    console.info(`#${pluginId}: open_dashboard`);
-    logseq.UI.showMsg(`Open dashboard`);
-
-    //Advanced Query
-    const queryScript = logseq.settings.advancedQuery;
-    console.log(`#${pluginId}: queryScript ${queryScript}`); /* TODO */
-    const queryResult = await logseq.DB.datascriptQuery(queryScript);
-    console.log(`#${pluginId}: Advanced Query result`);
-    console.log(queryResult);
-    logseq.UI.showMsg(`Advanced Query`);
-
-
+  async open_booklog_jp() {
+    console.info(`#${pluginId}: open_booklog_jp`);
 
     /* JSON */
     const settingJsonUrl = logseq.settings.jsonUrl;
@@ -99,7 +70,7 @@ const model = {
       console.log(`#${pluginId}: warning`);
       logseq.UI.showMsg(`warning: プラグインの設定をおこなってください。`);//warning message
     }
-    console.log(`#${pluginId}: open_dashboard end`);
+    console.log(`#${pluginId}: open_booklog_jp end`);
   }
 };
 
