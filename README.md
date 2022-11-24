@@ -11,7 +11,7 @@
 ## How to use
 1. ブクログからCSVファイルを取得する(ダウンロード) https://booklog.jp/export
 1. http://yu000jp.php.xdomain.jp/main/booklog/logseq/ にアップロードして、URLをコピーする
-1. Logseqマーケットプレイスからプラグインをインストールする``
+1. Logseqマーケットプレイスからプラグインをインストールする (`booklog_jp-import`で探す)
 1. プラグインの設定項目にURLを貼り付ける
 1. ツールバーにある`📚`からプラグインを実行する
 1. ネット上に作成されたJSONファイルが読み込まれ、Logseqにページが作成される
