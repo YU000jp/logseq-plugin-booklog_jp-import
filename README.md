@@ -4,9 +4,8 @@
  - Create a booklist by import from https://booklog.jp/
 
 ## what can  do
+- This plugin processes the content of data exported by [`booklog.jp`](https://booklog.jp/). it's a site from Japan.
 - Load a exported file and create pages. Configure page properties.
-- To use Logseq as a booklist.
-- [`booklog.jp`](https://booklog.jp/) is a site from Japan.
 - ブクログのファイルエクスポートを利用し、Logseqにブックリストを作成するプラグイン
 
 ## How to use
@@ -45,6 +44,10 @@
  ### TODO List
  1. add `古いページファイルを削除しない`
  1. LogseqにCSVファイルをアップロードできるようにする(その後の処理も)
+
+ ### How to install
+ - Logseq marketplace `booklog_jp-import`
+ - logseq `Developer mode`https://github.com/YU000jp/logseq-plugin-booklog_jp-import/releases
 
 ### How it works
 #### Create a page file in such a format and include it in the page tag
