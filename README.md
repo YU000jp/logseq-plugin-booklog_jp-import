@@ -10,7 +10,7 @@
 - ブクログ/booklog.jpのファイルエクスポートを利用し、Logseqにブックリストを作成してログを残すためのプラグイン
 
 ## How to use
- 1. CSVファイルを取得 https://booklog.jp/export
+ 1. ブクログからCSVファイルを取得 https://booklog.jp/export
  1. http://yu000jp.php.xdomain.jp/main/booklog/logseq/ にアップロードして、URLをコピーする
  1. Logseqマーケットプレイスからプラグインをインストールする
  1. プラグインの設定項目にURLを貼り付ける
