@@ -4,7 +4,7 @@
  - Create a booklist by import from [`booklog.jp`](https://booklog.jp/)
 
 ## what can  do
-- Load a JSON file and create pages. Configure page properties.
+- Load a exported file and create pages. Configure page properties.
 - To use Logseq as a booklist.
 - booklog.jp is a site from Japan.
 - ブクログ/booklog.jpのファイルエクスポートを利用し、Logseqにブックリストを作成してログを残すためのプラグイン
