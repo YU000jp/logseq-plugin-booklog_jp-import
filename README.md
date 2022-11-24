@@ -1,4 +1,4 @@
-🚩Published on logseq marketplace. 
+🚩Non Published on logseq marketplace. 
 
 # logseq-plugin-booklog_jp-import
  - Create a booklist by import from [`booklog.jp`](https://booklog.jp/)
