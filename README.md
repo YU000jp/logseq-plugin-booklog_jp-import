@@ -1,4 +1,4 @@
-🚩Non Published on logseq marketplace. 
+🚩Non Published on logseq marketplace.
 
 # logseq-plugin-booklog_jp-import
  - Create a booklist by import from https://booklog.jp/
@@ -31,6 +31,10 @@
  - ページに直接書かないようにしてください
  - 必ずタグ(リンク)をつけてログを残してください
  
+  ### How to install
+ - Seek for this`booklog_jp-import` on Logseq marketplace
+ - If you use Logseq `Developer mode`https://github.com/YU000jp/logseq-plugin-booklog_jp-import/releases
+ 
  --- 
  
  ## Code (plugin develop)
@@ -44,10 +48,6 @@
  ### TODO List
  1. add `古いページファイルを削除しない`
  1. LogseqにCSVファイルをアップロードできるようにする(その後の処理も)
-
- ### How to install
- - Seek for this`booklog_jp-import` on Logseq marketplace
- - If you use Logseq `Developer mode`https://github.com/YU000jp/logseq-plugin-booklog_jp-import/releases
 
 ### How it works
 #### Create a page file in such a format and include it in the page tag
