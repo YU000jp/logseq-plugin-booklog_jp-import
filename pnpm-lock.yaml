@@ -2,12 +2,10 @@ lockfileVersion: 5.4
 
 specifiers:
   '@logseq/libs': latest
-  logseq-dateutils: ^0.0.26
   parcel: latest
 
 dependencies:
   '@logseq/libs': 0.0.10
-  logseq-dateutils: 0.0.26
 
 devDependencies:
   parcel: 2.8.0
@@ -1360,10 +1358,6 @@ packages:
 
   /lodash-es/4.17.21:
     resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
-    dev: false
-
-  /logseq-dateutils/0.0.26:
-    resolution: {integrity: sha512-HUipF4ZqIq5ecrR53Rp7sstMgEQc3lkrVZ8u0uZXm5MMBTeipzFSLwifD+VE1c0Kl6G2B4JFMux360qj1JI6rg==}
     dev: false
 
   /lower-case/2.0.2:

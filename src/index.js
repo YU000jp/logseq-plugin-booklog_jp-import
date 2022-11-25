@@ -1,5 +1,4 @@
 import '@logseq/libs';
-import { getDateForPage } from 'logseq-dateutils';
 import { logseq as PL } from "../package.json";
 import { settingUI } from './setting';
 const pluginId = PL.id;
@@ -37,7 +36,7 @@ const model = {
     /* JSON */
     const settingJsonUrl = logseq.settings.jsonUrl;
     if (settingJsonUrl != "") {
-      logseq.UI.showMsg(`info: 読み込みを開始しました。しばらく時間がかかります。`);//start message
+      logseq.UI.showMsg(`info: 読み込みを開始しました。しばらく時間がかかります。`,`info`,{timeout:10000});//start message
       const jsonImport = async (url) => {
         const response = await fetch(url);
         const jsonData = await response.json();
@@ -62,13 +61,13 @@ const model = {
         //foreach JSON end
 
         console.log(`#${pluginId}: JSON import done`);
-        logseq.UI.showMsg(`success: 作成が終わりました。`);//success message
+        logseq.UI.showMsg(`success: 作成が終わりました。`,`success`,{timeout:10000});//success message
       }
       jsonImport(settingJsonUrl);
 
     } else {
       console.log(`#${pluginId}: warning`);
-      logseq.UI.showMsg(`warning: プラグインの設定をおこなってください。`);//warning message
+      logseq.UI.showMsg(`プラグインの設定をおこなってください。`,`warning`,{timeout:10000});//warning message
     }
     console.log(`#${pluginId}: open_booklog_jp end`);
   }
