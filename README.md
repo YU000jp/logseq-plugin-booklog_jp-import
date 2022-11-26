@@ -78,3 +78,4 @@
 
 ### Credit
 - https://github.com/hkgnp/logseqplugin-basic-template
+- https://icooon-mono.com/11122-%e3%81%88%e3%82%93%e3%81%b4%e3%81%a4%e4%bb%98%e3%81%8d%e3%81%ae%e3%83%8e%e3%83%bc%e3%83%88%e3%82%a2%e3%82%a4%e3%82%b3%e3%83%b3/
