@@ -8,15 +8,18 @@
 - Load a exported file and create pages. Configure page properties.
 - ブクログのファイルエクスポートを利用し、Logseqにブックリストを作成するプラグイン
 
-## How to use
-1. ブクログからCSVファイルを取得する(ダウンロード) https://booklog.jp/export
-1. http://yu000jp.php.xdomain.jp/main/booklog/logseq/ にアップロードして、URLをコピーする
+## プラグインをつかう手順
 1. Logseqマーケットプレイスからプラグインをインストールする (`booklog_jp-import`で探す)
+1. ブクログからCSVファイルを取得する(ダウンロード) https://booklog.jp/export
+1. http://yu000jp.php.xdomain.jp/main/booklog/logseq/ にファイルをアップロードして、発行されたURLをコピーする
 1. プラグインの設定項目にURLを貼り付ける
 1. ツールバーにある`📚`からプラグインを実行する
 1. ネット上に作成されたJSONファイルが読み込まれ、Logseqにページが作成される
 1. `本/〇〇〇〇`という形式で、作成される
-1. 左サイドバーの`全ページ`を開き、今回作成されたページファイルを確認する
+1. グラフの再読み込み(`reindex`)をおこなう
+
+## ページにアクセスする方法
+1. `本`というページを開くか、左サイドバーの`全ページ`を開き、今回作成されたページファイルを確認する
 1. Logseqにログを書き足すには、ジャーナルでタグを使う
 1. タグ`#[[〇〇〇〇]]`を使い、アウトラインを書く
 1. そのページのLinked Referencesに表示される
