@@ -9,7 +9,7 @@
 - ブクログのファイルエクスポートを利用し、Logseqにブックリストを作成するプラグイン
 
 ## プラグインをつかう手順
-1. Logseqマーケットプレイスからプラグインをインストールする (`booklog_jp-import`で探す)
+1. Logseqマーケットプレイスからプラグインをインストールする (`booklog-jp-import`で探す)
 1. ブクログからCSVファイルを取得する(ダウンロード) https://booklog.jp/export
 1. http://yu000jp.php.xdomain.jp/main/booklog/logseq/ にファイルをアップロードして、発行されたURLをコピーする
 1. プラグインの設定項目にURLを貼り付ける
