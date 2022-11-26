@@ -1,6 +1,6 @@
 🚩Non Published on logseq marketplace.
 
-# logseq-plugin-booklog_jp-import
+# logseq-plugin-booklog-jp-import
  - Create a booklist by import from https://booklog.jp/
 
 ## what can  do

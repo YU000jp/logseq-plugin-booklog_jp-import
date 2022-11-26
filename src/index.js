@@ -67,7 +67,7 @@ const model = {
 
         console.log(`#${pluginId}: JSON import done`);
         logseq.showSettingsUI();
-        logseq.UI.showMsg("success: 作成が終わりました。\n\n\n`reindex`をおこなってください。\n\n*終了したらプラグインをオフにしてください。\n\n\nそのあと左メニューにある [全ページ] を開いてみてください。", `success`, {
+        logseq.UI.showMsg("書籍ページの作成が終わりました。\n\n\n`reindex`をおこなってください。\n\n*終了したらプラグインをオフにしてください。\n\n\nそのあと左メニューにある [全ページ] を開いてみてください。", `success`, {
           timeout: 30000,
         }); //success message
       };

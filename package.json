@@ -1,5 +1,5 @@
 {
-  "name": "logseq-plugin-booklog_jp-import",
+  "name": "logseq-plugin-booklog-jp-import",
   "description": "logseq plugin template",
   "author": "YU000jp",
   "main": "dist/index.html",
@@ -14,8 +14,8 @@
     "@logseq/libs": "latest"
   },
   "logseq": {
-    "id": "logseq-plugin-booklog_jp-import",
-    "title": "booklog_jp-import",
+    "id": "logseq-plugin-booklog-jp-import",
+    "title": "booklog-jp-import",
     "icon": "./icon.svg"
   },
   "devDependencies": {
