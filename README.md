@@ -31,7 +31,7 @@
 1. Logseqで関連のあるページのUnlinked Referencesに表示される
  
 ### How to install
-- Seek for this`booklog_jp-import` on Logseq marketplace
+- Seek for this`booklog-jp-import` on Logseq marketplace
 - If you use Logseq `Developer mode`https://github.com/YU000jp/logseq-plugin-booklog_jp-import/releases
  
 --- 
