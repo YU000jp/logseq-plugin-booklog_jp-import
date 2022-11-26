@@ -44,13 +44,7 @@
   - This plugin is reusable as a logseq plugin.
  
  ### Comment
- - まだ自分自身の技術不足があり、今回の方法で公開します。
- - 多くのLogseqプラグインは、Javascriptやnode.js、Typescript、Reactなどの技術で作成されています。
- - 今回は別のウェブサイトをつくり、サーバーサイドのPHPスクリプトで必要な処理をおこないます。
- 
- ### TODO List
- 1. add `古いページファイルを削除しない`
- 1. LogseqにCSVファイルをアップロードできるようにする(その後の処理も)
+ - Since my technical skills are still lacking, I will publish it in this way. Many Logseq plugins are powered by Javascript, node.js, Typescript, React, etc. This time we have a separate website and a server-side PHP script that does what we need to do.
 
 ### How it works
 #### Create a page file in such a format and include it in the page tag
