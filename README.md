@@ -18,33 +18,37 @@
 1. `本/〇〇〇〇`という形式で、作成される
 1. グラフの再読み込み(`reindex`)をおこなう
 
-## ページにアクセスする方法
-1. `本`というページを開くか、左サイドバーの`全ページ`を開き、今回作成されたページファイルを確認する
-1. Logseqにログを書き足すには、ジャーナルでタグを使う
-1. タグ`#[[〇〇〇〇]]`を使い、アウトラインを書く
-1. そのページのLinked Referencesに表示される
-1. ページを開いてログを探す
+## 書籍用のページを開く
+3種類の方法
+- `本`というページを開いて、書籍ページのリンクを見つける
+- 左サイドバーの`全ページ`を開き、作成されたページファイルを確認する
+- クエリーテーブルから見つける　※別途、方法を記載予定
+
+## 読書記録をつける
+1. Logseqにログを書き足すには、ジャーナルに書く
+1. タグ`#[[〇〇〇〇]]`を使ってリンクをつける、アウトライン形式で書いていく
+1. 書籍ページにあるLinked Referencesでログを見つける
+1. Logseqで関連のあるページのUnlinked Referencesに表示される
  
- ## Tips
- - `本`というページを開くとHierarchyと呼ぶリンクが表示される
- - リンクだけではなくページタグやAdvanced Queryからも各ページへアクセスできる
+## Tips
+- `本`というページを開くとHierarchyと呼ぶリンクが表示される
+- リンクだけではなくページタグやAdvanced Queryからも各ページへアクセスできる
  
- ## Attention
- - ツールバーから実行すると古いページファイルがいったん削除される
- - ページに直接書かないようにしてください
- - 必ずタグ(リンク)をつけてログを残してください
+## Attention
+- ページに直接書かないようにしてください
+- ジャーナルから、タグ(リンク)をつけてログを残してください
  
-  ### How to install
- - Seek for this`booklog_jp-import` on Logseq marketplace
- - If you use Logseq `Developer mode`https://github.com/YU000jp/logseq-plugin-booklog_jp-import/releases
+### How to install
+- Seek for this`booklog_jp-import` on Logseq marketplace
+- If you use Logseq `Developer mode`https://github.com/YU000jp/logseq-plugin-booklog_jp-import/releases
  
- --- 
+--- 
  
- ## Code (plugin develop)
-  - This plugin is reusable as a logseq plugin.
+## Code (plugin develop)
+- This plugin is reusable as a logseq plugin.
  
- ### Comment
- - Since my technical skills are still lacking, I will publish it in this way. Many Logseq plugins are powered by Javascript, node.js, Typescript, React, etc. This time we have a separate website and a server-side PHP script that does what we need to do.
+### Comment
+- Since my technical skills are still lacking, I will publish it in this way. Many Logseq plugins are powered by Javascript, node.js, Typescript, React, etc. This time we have a separate website and a server-side PHP script that does what we need to do.
 
 ### How it works
 #### Create a page file in such a format and include it in the page tag
@@ -82,11 +86,11 @@
         "Link": "[amazon.co.jp](https:\/\/www.amazon.co.jp\/dp\/4309502121\/) | [booklog.jp](https:\/\/booklog.jp\/item\/1\/4309502121)"
     }
 ]
- ```
- - Use `type` and `title` to determine the page title
+```
+- Use `type` and `title` to determine the page title
 
 ### Imported SDK
- - @logseq/libs https://logseq.github.io/plugins/
+- @logseq/libs https://logseq.github.io/plugins/
 
 ### Credit
- - https://github.com/hkgnp/logseqplugin-basic-template
+- https://github.com/hkgnp/logseqplugin-basic-template
