@@ -1,6 +1,6 @@
 {
   "name": "logseq-plugin-booklog-jp-import",
-  "description": "logseq plugin template",
+  "description": "Create a booklist by import from https://booklog.jp/",
   "author": "YU000jp",
   "main": "dist/index.html",
   "targets": {
