@@ -3,6 +3,10 @@ import { logseq as PL } from "../package.json";
 import { settingUI } from "./setting";
 const pluginId = PL.id;
 
+function getIsDuplicate(arr1, arr2) {
+  return [...arr1, ...arr2].filter(item => arr1.includes(item) && arr2.includes(item)).length > 0
+}
+
 /* main */
 const main = () => {
   settingUI(); /* -setting */
@@ -28,6 +32,8 @@ const main = () => {
     `,
   }); /* For open_booklog_jp */
 
+
+
   console.info(`#${pluginId}: loaded`);
 }; /* end_main */
 
@@ -35,7 +41,7 @@ const main = () => {
 const model = {
   async open_booklog_jp() {
     console.info(`#${pluginId}: open_booklog_jp`);
-
+    
     /* JSON */
     const settingJsonUrl = logseq.settings.jsonUrl;
     if (settingJsonUrl != "") {
@@ -46,13 +52,24 @@ const model = {
         console.log(jsonData);
         console.log(`jsonData No.0: ` + jsonData[0]);
 
+        //タグで限定する
+        if (logseq.settings.limitTags != "") {
+          const settingTagArray = logseq.settings.limitTags.split(',');
+        }
+
         //foreach JSON
         const foreachPage = await jsonData.forEach(function (item, index) {
           if (item.type === "") {
             item.type = "本";
           }
-          const createPageTitle = item.type + "/" + item.title;
-          item.title = createPageTitle;
+
+          //タグで限定する
+          const itemTagsArray = item.tags.split(',');
+          if (logseq.settings.limitTags != "" && getIsDuplicate(idList1, idList2)) {
+
+            //ページ作成タイトル
+            const createPageTitle = item.type + "/" + item.title;
+            item.title = createPageTitle;
             //create page
             const createP = logseq.Editor.createPage(createPageTitle, item, {
               createFirstBlock: true,
@@ -62,11 +79,18 @@ const model = {
             console.log(`create: ` + createPageTitle);
             logseq.UI.showMsg(`create:` + createPageTitle);
 
+          } else {
+            console.log(`Non-create(limit tags): ` + createPageTitle);
+          }
         });
         //foreach JSON end
 
         console.log(`#${pluginId}: JSON import done`);
-        logseq.showSettingsUI();
+
+
+        //本のページを開く TODO
+
+
         logseq.UI.showMsg("書籍ページの作成が終わりました。\n\n\n`reindex`をおこなってください。\n\n*終了したらプラグインをオフにしてください。\n\n\nそのあと左メニューにある [全ページ] を開いてみてください。", `success`, {
           timeout: 30000,
         }); //success message
