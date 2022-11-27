@@ -68,11 +68,11 @@ const model = {
         
 
         //タグで限定する
-        if (logseq.settings.limitTags != "") {
-          var settingTagArray = logseq.settings.limitTags.split(',');
-        }else{
-          var settingTagArray = "";
-        }
+        //if (logseq.settings.limitTags != "") {
+        //  var settingTagArray = logseq.settings.limitTags.split(',');
+        //}else{
+        //  var settingTagArray = "";
+        //}
 
         console.log(`settingTagArray: ` + settingTagArray);
         //settingTagArray;
@@ -87,7 +87,7 @@ const model = {
             item.title = createPageTitle;
 
           //タグで限定する
-          const itemTagsArray = item.tags.split(',');
+          //const itemTagsArray = item.tags.split(',');
           //if (logseq.settings.limitTags !== "" && getIsDuplicate(itemTagsArray, settingTagArray) !== "") {
 
             //create page
