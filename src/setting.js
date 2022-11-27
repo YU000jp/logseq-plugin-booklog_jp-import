@@ -14,14 +14,17 @@ export const settingUI = () => {
             default: ``,
             title: "タグ (デフォルトは無記入)",
             description: `コンマ「,」で区切ってタグを入力する。一致したものだけ書籍ページが作成されます。(すでに作成済みの場合は、この設定は無効です)`,
-        },
+        }
+    ];
+    logseq.useSettingsSchema(settingsTemplate);
+};
+
+
+/* ,
         {
             key: "limitCategory",
             type: "string",
             default: ``,
             title: "カテゴリ (デフォルトは無記入)",
             description: `コンマ「,」で区切ってカテゴリを入力する。一致したものだけ書籍ページが作成されます。(すでに作成済みの場合は、この設定は無効です)`,
-        }
-    ];
-    logseq.useSettingsSchema(settingsTemplate);
-};
+        } */
