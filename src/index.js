@@ -39,9 +39,10 @@ const main = () => {
 
 /* dashboard */
 const model = {
+  //click toolbar
   async open_booklog_jp() {
     console.info(`#${pluginId}: open_booklog_jp`);
-    
+
     /* JSON */
     const settingJsonUrl = logseq.settings.jsonUrl;
     if (settingJsonUrl != "") {
@@ -52,24 +53,36 @@ const model = {
         console.log(jsonData);
         console.log(`jsonData No.0: ` + jsonData[0]);
 
+
+
+        //imitCategory TODO
+
+
+        
+
         //タグで限定する
         if (logseq.settings.limitTags != "") {
-          const settingTagArray = logseq.settings.limitTags.split(',');
+          var settingTagArray = logseq.settings.limitTags.split(',');
+        }else{
+          var settingTagArray = "";
         }
+
+        console.log(`settingTagArray: ` + settingTagArray);
+        //settingTagArray;
 
         //foreach JSON
         const foreachPage = await jsonData.forEach(function (item, index) {
           if (item.type === "") {
             item.type = "本";
           }
+            //ページ作成タイトル
+            var createPageTitle = item.type + "/" + item.title;
+            item.title = createPageTitle;
 
           //タグで限定する
           const itemTagsArray = item.tags.split(',');
-          if (logseq.settings.limitTags != "" && getIsDuplicate(idList1, idList2)) {
+          if (logseq.settings.limitTags != "" && getIsDuplicate(itemTagsArray, settingTagArray) != "") {
 
-            //ページ作成タイトル
-            const createPageTitle = item.type + "/" + item.title;
-            item.title = createPageTitle;
             //create page
             const createP = logseq.Editor.createPage(createPageTitle, item, {
               createFirstBlock: true,
@@ -87,11 +100,8 @@ const model = {
 
         console.log(`#${pluginId}: JSON import done`);
 
-
-        //本のページを開く TODO
-
-
-        logseq.UI.showMsg("書籍ページの作成が終わりました。\n\n\n`reindex`をおこなってください。\n\n*終了したらプラグインをオフにしてください。\n\n\nそのあと左メニューにある [全ページ] を開いてみてください。", `success`, {
+        logseq.updateSettings({ disabled: true });
+        logseq.UI.showMsg("書籍ページの作成が終わりました。\n\n\n`reindex`をおこなってください。\n\n*プラグインはオフになりました。\n\n\nそのあと左メニューにある [全ページ] を開いてみてください。", `success`, {
           timeout: 30000,
         }); //success message
       };
