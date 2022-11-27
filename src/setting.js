@@ -7,24 +7,24 @@ export const settingUI = () => {
             default: ``,
             title: "Converted .csv to .json",
             description: `変換用サイトで、コピーしたURLを貼り付けてください。`,
-        },
-        {
-            key: "limitTags",
-            type: "string",
-            default: ``,
-            title: "タグ (デフォルトは無記入)",
-            description: `コンマ「,」で区切ってタグを入力する。一致したものだけ書籍ページが作成されます。(すでに作成済みの場合は、この設定は無効です)`,
         }
     ];
     logseq.useSettingsSchema(settingsTemplate);
 };
 
 
-/* ,
-        {
+        /*
+        ,{
+            key: "limitTags",
+            type: "string",
+            default: ``,
+            title: "タグ (デフォルトは無記入)",
+            description: `コンマ「,」で区切ってタグを入力する。一致したものだけ書籍ページが作成されます。(すでに作成済みの場合は、この設定は無効です)`,
+        },{
             key: "limitCategory",
             type: "string",
             default: ``,
             title: "カテゴリ (デフォルトは無記入)",
             description: `コンマ「,」で区切ってカテゴリを入力する。一致したものだけ書籍ページが作成されます。(すでに作成済みの場合は、この設定は無効です)`,
-        } */
+        }
+        */

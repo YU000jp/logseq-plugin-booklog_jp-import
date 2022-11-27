@@ -47,7 +47,13 @@ const model = {
     const settingJsonUrl = logseq.settings.jsonUrl;
     if (settingJsonUrl != "") {
       const jsonImport = async (jsonUrl) => {
-        const response = await fetch(jsonUrl);
+        const response = await fetch(jsonUrl, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+        });
         const jsonData = await response.json();
         console.log(`#${pluginId}: JSON import`);
         console.log(jsonData);
@@ -81,7 +87,7 @@ const model = {
 
           //タグで限定する
           const itemTagsArray = item.tags.split(',');
-          if (logseq.settings.limitTags != "" && getIsDuplicate(itemTagsArray, settingTagArray) != "") {
+          //if (logseq.settings.limitTags !== "" && getIsDuplicate(itemTagsArray, settingTagArray) !== "") {
 
             //create page
             const createP = logseq.Editor.createPage(createPageTitle, item, {
@@ -92,9 +98,9 @@ const model = {
             console.log(`create: ` + createPageTitle);
             logseq.UI.showMsg(`create:` + createPageTitle);
 
-          } else {
-            console.log(`Non-create(limit tags): ` + createPageTitle);
-          }
+          //} else {
+          //  console.log(`Non-create(limit tags): ` + createPageTitle);
+          //}
         });
         //foreach JSON end
 
