@@ -52,7 +52,7 @@ const model = {
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': 'lsp://logseq.io'
+            'mode': 'no-cors'
           }
         });
         const jsonData = await response.json();
