@@ -52,31 +52,23 @@ const model = {
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Headers": "Content-Type"
           }
         });
         const jsonData = await response.json();
         console.log(`#${pluginId}: JSON import`);
+        console.log(`jsonData: `);
         console.log(jsonData);
-        console.log(`jsonData No.0: ` + jsonData[0]);
-
-
-
-        //imitCategory TODO
-
-
-
+        console.log(`jsonData No.0: `);
+        console.log(jsonData[0]);
 
         //タグで限定する
-        if (logseq.settings.limitTags != "") {
-          var settingTagArray = logseq.settings.limitTags.split(',');
-        } else {
-          var settingTagArray = "";
-        }
+        //if (logseq.settings.limitTags != "") {
+        //  var settingTagArray = logseq.settings.limitTags.split(',');
+        //} else {
+        //  var settingTagArray = "";
+        //}
 
-        console.log(`settingTagArray: ` + settingTagArray);
+        //console.log(`settingTagArray: ` + settingTagArray);
 
         //foreach JSON
         const foreachPage = await jsonData.forEach(function (item, index) {
@@ -88,21 +80,22 @@ const model = {
           item.title = createPageTitle;
 
           //タグで限定する
-          const itemTagsArray = item.tags.split(',');
-          if (logseq.settings.limitTags !== "" && getIsDuplicate(itemTagsArray, settingTagArray) !== "") {
+          //const itemTagsArray = item.tags.split(',');
+          //if (logseq.settings.limitTags !== "" && getIsDuplicate(itemTagsArray, settingTagArray) !== "") {
 
             //create page
             const createP = logseq.Editor.createPage(createPageTitle, item, {
               createFirstBlock: true,
               format: "markdown",
-              redirect: false,
+              redirect: false
             });
             console.log(`create: ` + createPageTitle);
             logseq.UI.showMsg(`create:` + createPageTitle);
 
-          } else {
-            console.log(`Non-create(limit tags): ` + createPageTitle);
-          }
+          //} else {
+          //  タグに当てはまらないケース(作成しない)
+          //  console.log(`Non-create(limit tags): ` + createPageTitle);
+          //}
         });
         //foreach JSON end
 
