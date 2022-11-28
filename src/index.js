@@ -52,6 +52,7 @@ const model = {
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
+
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Headers": "Content-Type"
           }
@@ -69,14 +70,13 @@ const model = {
 
 
         //タグで限定する
-        //if (logseq.settings.limitTags != "") {
-        //  var settingTagArray = logseq.settings.limitTags.split(',');
-        //}else{
-        //  var settingTagArray = "";
-        //}
+        if (logseq.settings.limitTags != "") {
+          var settingTagArray = logseq.settings.limitTags.split(',');
+        } else {
+          var settingTagArray = "";
+        }
 
-        //console.log(`settingTagArray: ` + settingTagArray);
-        //settingTagArray;
+        console.log(`settingTagArray: ` + settingTagArray);
 
         //foreach JSON
         const foreachPage = await jsonData.forEach(function (item, index) {
@@ -88,28 +88,28 @@ const model = {
           item.title = createPageTitle;
 
           //タグで限定する
-          //const itemTagsArray = item.tags.split(',');
-          //if (logseq.settings.limitTags !== "" && getIsDuplicate(itemTagsArray, settingTagArray) !== "") {
+          const itemTagsArray = item.tags.split(',');
+          if (logseq.settings.limitTags !== "" && getIsDuplicate(itemTagsArray, settingTagArray) !== "") {
 
-          //create page
-          const createP = logseq.Editor.createPage(createPageTitle, item, {
-            createFirstBlock: true,
-            format: "markdown",
-            redirect: false,
-          });
-          console.log(`create: ` + createPageTitle);
-          logseq.UI.showMsg(`create:` + createPageTitle);
+            //create page
+            const createP = logseq.Editor.createPage(createPageTitle, item, {
+              createFirstBlock: true,
+              format: "markdown",
+              redirect: false,
+            });
+            console.log(`create: ` + createPageTitle);
+            logseq.UI.showMsg(`create:` + createPageTitle);
 
-          //} else {
-          //  console.log(`Non-create(limit tags): ` + createPageTitle);
-          //}
+          } else {
+            console.log(`Non-create(limit tags): ` + createPageTitle);
+          }
         });
         //foreach JSON end
 
         console.log(`#${pluginId}: JSON import done`);
 
-        logseq.updateSettings({ disabled: true });
-        logseq.UI.showMsg("書籍ページの作成が終わりました。\n\n\n`reindex`をおこなってください。\n\n*プラグインはオフになりました。\n\n\nそのあと左メニューにある [全ページ] を開いてみてください。", `success`, {
+        logseq.updateSettings({ disabled: true });//plugin off
+        logseq.UI.showMsg("書籍ページの作成が終わりました。\n\n*プラグインはオフになりました。\n\n\n`reindex`をおこなってください。\n\n\nそのあと左メニューにある [全ページ] を開いてみてください。", `success`, {
           timeout: 30000,
         }); //success message
       };
