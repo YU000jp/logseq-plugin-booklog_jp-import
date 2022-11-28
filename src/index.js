@@ -48,11 +48,11 @@ const model = {
     if (settingJsonUrl != "") {
       const jsonImport = async (jsonUrl) => {
         const response = await fetch(jsonUrl, {
-          method: 'POST',
+          method: 'GET',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
+            'Access-Control-Allow-Origin': 'lsp://logseq.io'
           }
         });
         const jsonData = await response.json();
@@ -74,7 +74,7 @@ const model = {
         //  var settingTagArray = "";
         //}
 
-        console.log(`settingTagArray: ` + settingTagArray);
+        //console.log(`settingTagArray: ` + settingTagArray);
         //settingTagArray;
 
         //foreach JSON
@@ -118,6 +118,8 @@ const model = {
       logseq.UI.showMsg(`プラグインの設定をおこなってください。`, `warning`, {
         timeout: 10000,
       }); //warning message
+      logseq.App.openExternalLink('http://yu000jp.php.xdomain.jp/main/booklog/logseq/');
+      logseq.App.openExternalLink('https://booklog.jp/export');
       logseq.showSettingsUI();
     }
     console.log(`#${pluginId}: open_booklog_jp end`);
