@@ -52,7 +52,8 @@ const model = {
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'mode': 'no-cors'
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Headers": "Content-Type"
           }
         });
         const jsonData = await response.json();
@@ -65,7 +66,7 @@ const model = {
         //imitCategory TODO
 
 
-        
+
 
         //タグで限定する
         //if (logseq.settings.limitTags != "") {
@@ -82,22 +83,22 @@ const model = {
           if (item.type === "") {
             item.type = "本";
           }
-            //ページ作成タイトル
-            var createPageTitle = item.type + "/" + item.title;
-            item.title = createPageTitle;
+          //ページ作成タイトル
+          var createPageTitle = item.type + "/" + item.title;
+          item.title = createPageTitle;
 
           //タグで限定する
           //const itemTagsArray = item.tags.split(',');
           //if (logseq.settings.limitTags !== "" && getIsDuplicate(itemTagsArray, settingTagArray) !== "") {
 
-            //create page
-            const createP = logseq.Editor.createPage(createPageTitle, item, {
-              createFirstBlock: true,
-              format: "markdown",
-              redirect: false,
-            });
-            console.log(`create: ` + createPageTitle);
-            logseq.UI.showMsg(`create:` + createPageTitle);
+          //create page
+          const createP = logseq.Editor.createPage(createPageTitle, item, {
+            createFirstBlock: true,
+            format: "markdown",
+            redirect: false,
+          });
+          console.log(`create: ` + createPageTitle);
+          logseq.UI.showMsg(`create:` + createPageTitle);
 
           //} else {
           //  console.log(`Non-create(limit tags): ` + createPageTitle);
