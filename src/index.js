@@ -171,7 +171,7 @@ const model = {
         //foreach JSON end
         console.log(`#${pluginId}: JSON import done`);
         //logseq.updateSettings({ disabled: true });//plugin off NOT
-        logseq.UI.showMsg("書籍ページの作成が終わりました。\n\n*プラグインをオフにしてください。\n\n\n`reindex`をおこなってください。\n\n\nそのあと左メニューにある [" + createContentTitle + "] を開いてみてください。", `success`, {
+        logseq.UI.showMsg("書籍ページの作成が終わりました。\n\n*プラグインをオフにしてください。\n\n\n`reindex`をおこなってください。\n\n\nそのあと左メニューにある [全ページ] からページを探してください。\n\n", `success`, {
           timeout: 30000,
         }); //success message
       };
