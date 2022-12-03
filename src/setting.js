@@ -6,7 +6,15 @@ export const settingUI = () => {
             type: "string",
             default: ``,
             title: "Converted .csv to .json",
-            description: `変換用サイトで、コピーしたURLを貼り付けてください。`,
+            description: `変換用サイトで、コピーしたURLを貼り付けてください。空欄で📚を押すと変換用サイトが開かれます。`,
+        },
+        {
+            key: "deleteTitle",
+            type: "object",
+            inputAs: "hidden",
+            default: null,
+            title: " ",
+            description: ` `,
         }
     ];
     logseq.useSettingsSchema(settingsTemplate);
