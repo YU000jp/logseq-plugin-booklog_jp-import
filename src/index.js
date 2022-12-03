@@ -144,9 +144,9 @@ const model = {
         const todayDateInUserFormat = getDateForPage(today, preferredDateFormat);
         //create content page
         const blockInPage = await logseq.Editor.appendBlockInPage(createContentTitle, todayDateInUserFormat + "リスト更新", { parent: "本,読書", redirect: true });
-        logseq.Editor.appendBlockInPage(blockInPage.uuid, "タイトルリスト\n" + PageTitleList);
-        logseq.Editor.appendBlockInPage(blockInPage.uuid, "タグ一覧\n" + [...(new Set(PageTagsList))]);
-        logseq.Editor.appendBlockInPage(blockInPage.uuid, "カテゴリー\n" + [...(new Set(PageCategoryList))]);
+        logseq.Editor.insertBlock(blockInPage.uuid, "タイトルリスト\n" + PageTitleList);
+        logseq.Editor.insertBlock(blockInPage.uuid, "タグ一覧\n" + [...(new Set(PageTagsList))]);
+        logseq.Editor.insertBlock(blockInPage.uuid, "カテゴリー\n" + [...(new Set(PageCategoryList))]);
         //sort year
         PageYearList.sort(function (first, second) {
           return first - second;
@@ -154,13 +154,13 @@ const model = {
         PageYearList.forEach((value, index) => {
           PageYearList[index] = " [[" + value + "]] ";
         });
-        logseq.Editor.appendBlockInPage(blockInPage.uuid, "発行年\n" + [...(new Set(PageYearList))]);
-        logseq.Editor.appendBlockInPage(blockInPage.uuid, "著者\n" + [...(new Set(PageAuthorList))]);
+        logseq.Editor.insertBlock(blockInPage.uuid, "発行年\n" + [...(new Set(PageYearList))]);
+        logseq.Editor.insertBlock(blockInPage.uuid, "著者\n" + [...(new Set(PageAuthorList))]);
         PagePublisherList.forEach((value, index) => {
           PagePublisherList[index] = "[" + value + "](出版社/" + value + ")\n";
         });
-        logseq.Editor.appendBlockInPage(blockInPage.uuid, "出版社\n" + [...(new Set(PagePublisherList))]);
-        logseq.Editor.appendBlockInPage(blockInPage.uuid, "種別\n" + [...(new Set(PageTypeList))]);
+        logseq.Editor.insertBlock(blockInPage.uuid, "出版社\n" + [...(new Set(PagePublisherList))]);
+        logseq.Editor.insertBlock(blockInPage.uuid, "種別\n" + [...(new Set(PageTypeList))]);
 
         logseq.updateSettings({ deleteTitle: pullDeleteList });
 
