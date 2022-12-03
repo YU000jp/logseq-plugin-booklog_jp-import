@@ -70,6 +70,11 @@ const model = {
 
         //console.log(`settingTagArray: ` + settingTagArray);
 
+        //list up
+        const PageTitleList = array;
+        const PageTagsList = array;
+        const PageCategoryList = array;
+
         //foreach JSON
         const foreachPage = await jsonData.forEach(function (item, index) {
           if (item.type === "") {
@@ -78,6 +83,9 @@ const model = {
           //ページ作成タイトル
           var createPageTitle = item.type + "/" + item.title;
           item.title = createPageTitle;
+          PageTitleList.push(item.title);
+          if(item.tags !== "") PageTagsList.push(item.tags);
+          if(item.tags !== "") PageCategoryList.push(item.category);
 
           //タグで限定する
           //const itemTagsArray = item.tags.split(',');
@@ -90,6 +98,10 @@ const model = {
               redirect: false
             });
             console.log(`create: ` + createPageTitle);
+            console.log(`list up: `);
+            console.log(PageTitleList);
+            console.log(PageTagsList);
+            console.log(PageCategoryList);
             logseq.UI.showMsg(`create:` + createPageTitle);
 
           //} else {
