@@ -40,7 +40,7 @@ const model = {
   async open_booklog_jp() {
     console.info(`#${pluginId}: open_booklog_jp`);
 
-    const createContentTitle = "本/ブクログのリスト";
+    const createContentTitle = "ブクログのリスト";
 
 
     if (logseq.settings.deleteMode === "Delete") {
@@ -54,37 +54,35 @@ const model = {
         logseq.updateSettings({ deleteMode: null, });
         logseq.showSettingsUI();
       } else {
-        const deleteFunction = () => {
-          try {
-            //delete page by title
-            const deleteObjTitle = logseq.settings.listTitle;
-            deleteObjTitle.forEach(function (value) {
-              return logseq.Editor.deletePage(value);
-            });
-            //delete page by publisher
-            const deleteObjPublisher = logseq.settings.listPublisher;
-            deleteObjPublisher.forEach(function (value) {
-              return logseq.Editor.deletePage(value);
-            });
-            //delete page by publisher
-            const deleteObjAuthor = logseq.settings.listAuthor;
-            deleteObjAuthor.forEach(function (value) {
-              return logseq.Editor.deletePage(value);
-            });
-            logseq.Editor.deletePage(createContentTitle);
-            logseq.UI.showMsg("削除がおわりました。\n\n'reindex'をおこなってください。", `success`, {
-              timeout: 9000,
-            });
-            logseq.updateSettings({ listTitle: "", listPublisher: "", listAuthor: "", });//(keep delete mode)
-          } catch (err) {
-            console.log(err);
-          }
-        };
         try {
-          await logseq.UI.showMsg("削除が実行されます。\n処理が終わるまでお待ちください。\n\n", `info`, {
-            timeout: 10000,
-          });
+          await logseq.UI.showMsg("削除が実行されます。\n処理が終わるまでお待ちください。\n\n", `info`);
         } finally {
+          const deleteFunction = async () => {
+            try {
+              //delete page by title
+              const deleteObjTitle = logseq.settings.listTitle;
+              deleteObjTitle.forEach(function (value) {
+                return logseq.Editor.deletePage(value);
+              });
+              //delete page by publisher
+              const deleteObjPublisher = logseq.settings.listPublisher;
+              deleteObjPublisher.forEach(function (value) {
+                return logseq.Editor.deletePage(value);
+              });
+              //delete page by publisher
+              const deleteObjAuthor = logseq.settings.listAuthor;
+              deleteObjAuthor.forEach(function (value) {
+                return logseq.Editor.deletePage(value);
+              });
+              logseq.Editor.deletePage(createContentTitle);
+              logseq.UI.showMsg("削除がおわりました。\n\n'reindex'をおこなってください。", `success`, {
+                timeout: 9000,
+              });
+              logseq.updateSettings({ listTitle: "", listPublisher: "", listAuthor: "", });//(keep delete mode)
+            } catch (err) {
+              console.log(err);
+            }
+          };
           setTimeout(deleteFunction, 3);//seconds
         }
 
@@ -95,10 +93,9 @@ const model = {
       create page start
       */
       try {
-        logseq.UI.showMsg("読み込んでいます。\n処理が終わるまでお待ちください。\n\n", `info`, {
-          timeout: 6000,
-        });
+        await logseq.UI.showMsg("読み込んでいます。\n処理が終わるまでお待ちください。\n\n", `info`);
       } finally {
+
         /* JSON */
         const settingJsonUrl = logseq.settings.jsonUrl;
         if (settingJsonUrl != "") {
@@ -138,7 +135,7 @@ const model = {
             const PagePublisherList = [];
             const PageTypeList = [];
             const pullAuthorList = [];
-
+            
             //foreach JSON
             try {
               jsonData.forEach(function (item, index) {
