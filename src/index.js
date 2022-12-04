@@ -135,7 +135,7 @@ const model = {
             const PagePublisherList = [];
             const PageTypeList = [];
             const pullAuthorList = [];
-            
+
             //foreach JSON
             try {
               jsonData.forEach(function (item, index) {
@@ -240,7 +240,7 @@ const model = {
               logseq.Editor.insertBlock(blockInPage.uuid, "出版社\n" + [...(new Set(PagePublisherList))]);
               logseq.Editor.insertBlock(blockInPage.uuid, "種別\n" + [...(new Set(PageTypeList))]);
 
-              logseq.updateSettings({ listTitle: pullDeleteList, listPublisher: pullPublisherList, listAuthor: pullAuthorList, });
+              logseq.updateSettings({ listTitle: pullDeleteList, listPublisher: pullPublisherList, listAuthor: pullAuthorList, deleteMode: "" });
 
               //本のページに移動する TODO
 
