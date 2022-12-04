@@ -37,7 +37,7 @@ const main = () => {
 const model = {
 
   //click toolbar
-  async open_booklog_jp() {
+  open_booklog_jp() {
     console.info(`#${pluginId}: open_booklog_jp`);
 
     const createContentTitle = "ブクログのリスト";
@@ -50,7 +50,7 @@ const model = {
       if (logseq.settings.listTitle === "") {
 
         //delete mode && listTitle ""
-        await logseq.UI.showMsg("削除が実行できませんでした。\n\n", `error`, {
+        logseq.UI.showMsg("削除が実行できませんでした。\n\n", `error`, {
           timeout: 6000,
         });
         logseq.updateSettings({ deleteMode: null, });
@@ -58,7 +58,7 @@ const model = {
 
       } else {
 
-        await logseq.UI.showMsg("削除が実行されます。\n処理が終わるまでお待ちください。\n\n", `info`);
+        logseq.UI.showMsg("削除が実行されます。\n処理が終わるまでお待ちください。\n\n", `info`);
         try {
           //delete page by title
           const deleteObjTitle = logseq.settings.listTitle;
@@ -92,7 +92,7 @@ const model = {
       create page start
       */
       try {
-        await logseq.UI.showMsg("読み込んでいます。\n処理が終わるまでお待ちください。\n\n", `info`);
+        logseq.UI.showMsg("読み込んでいます。\n処理が終わるまでお待ちください。\n\n", `info`);
       } finally {
 
         /* JSON */
