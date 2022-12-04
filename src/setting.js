@@ -5,17 +5,43 @@ export const settingUI = () => {
             key: "jsonUrl",
             type: "string",
             default: ``,
-            title: "Converted .csv to .json",
-            description: `変換用サイトで、コピーしたURLを貼り付けてください。空欄で📚を押すと変換用サイトが開かれます。`,
+            title: "変換用サイトで、コピーしたURLを貼り付けてください。",
+            description: "追加更新について [空欄にしてから📚を押すと変換用サイトが開きます。そこにもう一度アップロードしてその新しいURLを貼り付けてください。次の項目で[Rewrite]を選択して📚を押すと実行されます。]",
         },
         {
-            key: "deleteTitle",
+            key: "deleteMode",
+            type: "enum",
+            inputAs: "enum",
+            default: null,
+            enumChoices: [null,"Rewrite","Delete"],
+            enumPicker: "select",
+            title: "追加・削除モード",
+            description: "[Delete]を選択して📚を押すと書籍の関連ページが全部削除されます。",
+        },
+        {
+            key: "listTitle",
             type: "object",
             inputAs: "hidden",
             default: null,
             title: " ",
-            description: ` `,
-        }
+            description: "右上のEdit setting.jsonで作成された書籍ページの一覧をファイルで確認できます。",
+        },
+        {
+            key: "listPublisher",
+            type: "object",
+            inputAs: "hidden",
+            default: null,
+            title: null,
+            description: null,
+        },
+        {
+            key: "listAuthor",
+            type: "object",
+            inputAs: "hidden",
+            default: null,
+            title: null,
+            description: null,
+        },
     ];
     logseq.useSettingsSchema(settingsTemplate);
 };
