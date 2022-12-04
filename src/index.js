@@ -41,7 +41,7 @@ const model = {
     console.info(`#${pluginId}: open_booklog_jp`);
 
     const createContentTitle = "ブクログのリスト";
-
+    const settingJsonUrl = logseq.settings.jsonUrl;
 
     if (logseq.settings.deleteMode === "Delete") {
       /*
@@ -88,7 +88,7 @@ const model = {
 
       }
 
-    } else if (logseq.settings.listTitle === "" || logseq.settings.deleteMode === "Rewrite") {
+    } else if (settingJsonUrl !== "" && (logseq.settings.listTitle === "" || logseq.settings.deleteMode === "Rewrite")) {
       /*
       create page start
       */
@@ -97,8 +97,6 @@ const model = {
       } finally {
 
         /* JSON */
-        const settingJsonUrl = logseq.settings.jsonUrl;
-        if (settingJsonUrl != "") {
           const jsonImport = async (jsonUrl) => {
             const response = await fetch(jsonUrl, {
               method: 'GET',
@@ -256,21 +254,22 @@ const model = {
             setTimeout(functionCreateContentPage, 3);//seconds
           };
           jsonImport(settingJsonUrl);
-        } else {
-          console.log(`#${pluginId}: warning`);
-          logseq.UI.showMsg(`プラグインの設定をおこなってください。\n\n\nブクログのエクスポート画面と変換用サイトがブラウザに開かれています。\n\n\nブクログからファイルをダウンロードして、それを変換用サイトにアップロードしてください。\n\n発行されたURLをコピーして、設定画面で貼り付けてください。\n\n\nそのあとツールバーの📚ボタンを押すとインポートが実行されます。`, `warning`, {
-            timeout: 10000,
-          }); //warning message
-          logseq.App.openExternalLink('http://yu000jp.php.xdomain.jp/main/booklog/logseq/');
-          logseq.App.openExternalLink('https://booklog.jp/export');
-          logseq.showSettingsUI();
-        }
         console.log(`#${pluginId}: open_booklog_jp end`);
       }
     } else {
+      if(settingJsonUrl === ""){
+        console.log(`#${pluginId}: warning`);
+        logseq.UI.showMsg(`プラグインの設定をおこなってください。\n\n\nブクログのエクスポート画面と変換用サイトがブラウザに開かれています。\n\n\nブクログからファイルをダウンロードして、それを変換用サイトにアップロードしてください。\n\n発行されたURLをコピーして、設定画面で貼り付けてください。\n\n\nそのあとツールバーの📚ボタンを押すとインポートが実行されます。`, `warning`, {
+          timeout: 10000,
+        }); //warning message
+        logseq.App.openExternalLink('http://yu000jp.php.xdomain.jp/main/booklog/logseq/');
+        logseq.App.openExternalLink('https://booklog.jp/export');
+        logseq.showSettingsUI();
+      }else{
       logseq.UI.showMsg("すでにページが作成されています。\n\n", `warning`, {
         timeout: 6000,
       });
+    }
       logseq.updateSettings({ deleteMode: null, });
       logseq.showSettingsUI();
     }
