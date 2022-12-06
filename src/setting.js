@@ -11,9 +11,8 @@ export const settingUI = () => {
         {
             key: "deleteMode",
             type: "enum",
-            inputAs: "enum",
             default: null,
-            enumChoices: [null,"Rewrite","Delete"],
+            enumChoices: ["","Rewrite","Delete"],
             enumPicker: "select",
             title: "追加・削除モード",
             description: "[Delete]を選択して📚を押すと書籍の関連ページが全部削除されます。(ジャーナルページに書いた内容は消えません)",
