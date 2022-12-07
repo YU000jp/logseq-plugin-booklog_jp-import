@@ -2,6 +2,9 @@
 
 - Create a booklist by import from <https://booklog.jp/>
 
+[![latest release version](https://img.shields.io/github/v/release/YU000jp/logseq-plugin-booklog-jp-import)](https://github.com/YU000jp/logseq-plugin-booklog-jp-import/releases)
+[![License](https://img.shields.io/github/license/YU000jp/logseq-plugin-booklog-jp-import?color=blue)](https://github.com/YU000jp/logseq-plugin-booklog-jp-import/blob/main/LICENSE)
+
 ## what can  do
 
 - This plugin processes the content of data exported by [`booklog.jp`](https://booklog.jp/). it's a site from Japan.
