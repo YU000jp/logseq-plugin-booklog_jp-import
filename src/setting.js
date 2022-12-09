@@ -11,7 +11,7 @@ export const settingUI = () => {
         {
             key: "deleteMode",
             type: "enum",
-            default: null,
+            default: "",
             enumChoices: ["","Rewrite","Delete"],
             enumPicker: "select",
             title: "追加・削除モード",
@@ -21,7 +21,7 @@ export const settingUI = () => {
             key: "listTitle",
             type: "object",
             inputAs: "hidden",
-            default: null,
+            default: "",
             title: " ",
             description: "`Edit setting.json`で作成された書籍ページの一覧をファイルで確認できます。※削除モード用のリストです。",
         },
