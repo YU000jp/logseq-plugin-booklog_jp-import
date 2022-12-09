@@ -97,14 +97,25 @@ const model = {
 
         /* JSON */
         const jsonImport = async (jsonUrl) => {
-          const response = await fetch(jsonUrl, {
+          const jsonData = await fetch(jsonUrl, {
             method: 'GET',
             headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json',
             }
-          });
-          const jsonData = await response.json();
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error();
+              }
+              return response.json();
+            })
+            .catch((reason) => {
+              logseq.UI.showMsg("ERROR: URLを確認してください", `error`, {
+                timeout: 6000,
+              });
+            });
+
           console.log(`#${pluginId}: JSON import`);
 
           //console.log(`jsonData: `);
@@ -264,7 +275,7 @@ const model = {
         logseq.App.openExternalLink('https://booklog.jp/export');
         logseq.showSettingsUI();
       } else {
-        logseq.UI.showMsg("すでにページが作成されています。\n\n", `warning`, {
+        logseq.UI.showMsg("すでにページが作成されています。\n\n", `error`, {
           timeout: 6000,
         });
       }
