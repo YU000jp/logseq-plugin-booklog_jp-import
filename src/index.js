@@ -48,16 +48,15 @@ const model = {
       delete mode
       */
       if (logseq.settings.listTitle === "") {
-
+      
         //delete mode && listTitle ""
         logseq.UI.showMsg("削除が実行できませんでした。\n\n", `error`, {
           timeout: 6000,
         });
-        logseq.updateSettings({ deleteMode: null, });
         logseq.showSettingsUI();
 
       } else {
-
+        
         logseq.UI.showMsg("削除が実行されます。\n処理が終わるまでお待ちください。\n\n", `info`);
         try {
           //delete page by title
@@ -76,7 +75,7 @@ const model = {
             logseq.Editor.deletePage(value);
           });
           logseq.Editor.deletePage(createContentTitle);
-          logseq.updateSettings({ listTitle: "", listPublisher: "", listAuthor: "", });//(keep delete mode)
+          logseq.updateSettings({ listTitle: "", listPublisher: "", listAuthor: "", });//keep delete mode
         } catch (err) {
           console.log(err);
         } finally {
@@ -86,13 +85,13 @@ const model = {
         }
 
       }
-
-    } else if (settingJsonUrl !== "" && (logseq.settings.listTitle === "" || logseq.settings.deleteMode === "Rewrite")) {
+    } else if (settingJsonUrl !== "" && (logseq.settings.deleteMode !== "Delete" && logseq.settings.deleteMode === "Write" || logseq.settings.listTitle === "")) {
       /*
       create page start
       */
       try {
         logseq.UI.showMsg("読み込んでいます。\n処理が終わるまでお待ちください。\n\n", `info`);
+        logseq.updateSettings({ deleteMode: "OFF" });
       } finally {
 
         /* JSON */
@@ -247,7 +246,7 @@ const model = {
             logseq.Editor.insertBlock(blockInPage.uuid, "出版社\n" + [...(new Set(PagePublisherList))]);
             logseq.Editor.insertBlock(blockInPage.uuid, "種別\n" + [...(new Set(PageTypeList))]);
 
-            logseq.updateSettings({ listTitle: pullDeleteList, listPublisher: pullPublisherList, listAuthor: pullAuthorList, deleteMode: "" });
+            logseq.updateSettings({ listTitle: pullDeleteList, listPublisher: pullPublisherList, listAuthor: pullAuthorList });
 
             //本のページに移動する TODO
 
@@ -279,7 +278,7 @@ const model = {
           timeout: 6000,
         });
       }
-      logseq.updateSettings({ deleteMode: null, });
+      logseq.updateSettings({ deleteMode: "OFF", });
       logseq.showSettingsUI();
     }
 
