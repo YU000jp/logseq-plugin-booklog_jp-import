@@ -259,7 +259,7 @@ const model = {
               timeout: 30000,
             }); //success message
           };
-          setTimeout(functionCreateContentPage, 3);//seconds
+          setTimeout(functionCreateContentPage, 500);
         };
         jsonImport(settingJsonUrl);
         console.log(`#${pluginId}: open_booklog_jp end`);
@@ -268,17 +268,21 @@ const model = {
       if (settingJsonUrl === "") {
         console.log(`#${pluginId}: warning`);
         logseq.UI.showMsg(`プラグインの設定をおこなってください。\n\n\nブクログのエクスポート画面と変換用サイトがブラウザに開かれています。\n\n\nブクログからファイルをダウンロードして、それを変換用サイトにアップロードしてください。\n\n発行されたURLをコピーして、設定画面で貼り付けてください。\n\n\nそのあとツールバーの📚ボタンを押すとインポートが実行されます。`, `warning`, {
-          timeout: 10000,
+          timeout: 100000,
         }); //warning message
+
+        const openLink = async () => {
         logseq.App.openExternalLink('http://yu000jp.php.xdomain.jp/main/booklog/logseq/');
         logseq.App.openExternalLink('https://booklog.jp/export');
+        }
         logseq.showSettingsUI();
+        setTimeout(openLink, 6000);
       } else {
         logseq.UI.showMsg("すでにページが作成されています。\n\n", `error`, {
           timeout: 6000,
         });
       }
-      logseq.updateSettings({ deleteMode: "OFF", });
+      logseq.updateSettings({ deleteMode: "OFF" });
       logseq.showSettingsUI();
     }
 
