@@ -35,8 +35,6 @@
 
 1. Logseqにログを書き足すには、ジャーナルに書く
 1. タグ`#[[本/〇〇〇〇]]`を使ってリンクをつける、アウトライン形式で書いていく
-1. 書籍ページにあるLinked Referencesでログを見つける
-1. Logseqで関連のあるページのUnlinked Referencesに表示される
 
 ### Credit
 
