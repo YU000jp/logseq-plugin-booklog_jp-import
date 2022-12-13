@@ -48,7 +48,7 @@ const model = {
       delete mode
       */
       if (logseq.settings.listTitle === "") {
-      
+
         //delete mode && listTitle ""
         logseq.UI.showMsg("削除が実行できませんでした。\n\n", `error`, {
           timeout: 6000,
@@ -56,214 +56,231 @@ const model = {
         logseq.showSettingsUI();
 
       } else {
-        
-        logseq.UI.showMsg("削除が実行されます。\n処理が終わるまでお待ちください。\n\n", `info`);
-        try {
-          //delete page by title
-          const deleteObjTitle = logseq.settings.listTitle;
-          deleteObjTitle.forEach(function (value) {
-            logseq.Editor.deletePage(value);
-          });
-          //delete page by publisher
-          const deleteObjPublisher = logseq.settings.listPublisher;
-          deleteObjPublisher.forEach(function (value) {
-            logseq.Editor.deletePage(value);
-          });
-          //delete page by publisher
-          const deleteObjAuthor = logseq.settings.listAuthor;
-          deleteObjAuthor.forEach(function (value) {
-            logseq.Editor.deletePage(value);
-          });
-          logseq.Editor.deletePage(createContentTitle);
-          logseq.updateSettings({ listTitle: "", listPublisher: "", listAuthor: "", });//keep delete mode
-        } catch (err) {
-          console.log(err);
-        } finally {
-          logseq.UI.showMsg("削除がおわりました。\n\n'reindex'をおこなってください。", `success`, {
+        if (window.confirm('削除を実行しますか')) {
+          try {
+            logseq.UI.showMsg("削除が実行されます。\n処理が終わるまでお待ちください。\n\n", `info`);
+            //delete page by title
+            const deleteObjTitle = logseq.settings.listTitle;
+            deleteObjTitle.forEach(function (value) {
+              logseq.Editor.deletePage(value);
+            });
+            //delete page by publisher
+            const deleteObjPublisher = logseq.settings.listPublisher;
+            deleteObjPublisher.forEach(function (value) {
+              logseq.Editor.deletePage(value);
+            });
+            //delete page by publisher
+            const deleteObjAuthor = logseq.settings.listAuthor;
+            deleteObjAuthor.forEach(function (value) {
+              logseq.Editor.deletePage(value);
+            });
+            logseq.Editor.deletePage(createContentTitle);
+            logseq.updateSettings({ listTitle: "", listPublisher: "", listAuthor: "", });//keep delete mode
+          } catch (err) {
+            console.log(err);
+          } finally {
+            logseq.UI.showMsg("削除がおわりました。\n\n'reindex'をおこなってください。", `success`, {
+              timeout: 9000,
+            });
+          }
+        }
+        else {
+          logseq.UI.showMsg("キャンセルしました", `info`, {
             timeout: 9000,
           });
+          logseq.updateSettings({ deleteMode: "OFF" });
+          logseq.showSettingsUI();
         }
-
       }
     } else if (settingJsonUrl !== "" && (logseq.settings.deleteMode !== "Delete" && logseq.settings.deleteMode === "Write" || logseq.settings.listTitle === "")) {
       /*
       create page start
       */
-      try {
-        logseq.UI.showMsg("読み込んでいます。\n処理が終わるまでお待ちください。\n\n", `info`);
-        logseq.updateSettings({ deleteMode: "OFF" });
-      } finally {
+      if (window.confirm('書籍ページが作成されます。実行しますか')) {
+        try {
+          logseq.UI.showMsg("読み込んでいます。\n処理が終わるまでお待ちください。\n\n", `info`);
+          logseq.updateSettings({ deleteMode: "OFF" });
+        } finally {
 
-        /* JSON */
-        const jsonImport = async (jsonUrl) => {
-          const jsonData = await fetch(jsonUrl, {
-            method: 'GET',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-            }
-          })
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error();
+          /* JSON */
+          const jsonImport = async (jsonUrl) => {
+            const jsonData = await fetch(jsonUrl, {
+              method: 'GET',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
               }
-              return response.json();
             })
-            .catch((reason) => {
-              logseq.UI.showMsg("ERROR: URLを確認してください", `error`, {
-                timeout: 6000,
-              });
-            });
-
-          console.log(`#${pluginId}: JSON import`);
-
-          //console.log(`jsonData: `);
-          //console.log(jsonData);
-          //console.log(`jsonData No.0: `);
-          //console.log(jsonData[0]);
-
-
-          //タグで限定する
-          //if (logseq.settings.limitTags != "") {
-          //  var settingTagArray = logseq.settings.limitTags.split(',');
-          //} else {
-          //  var settingTagArray = "";
-          //}
-
-          //console.log(`settingTagArray: ` + settingTagArray);
-
-          //list up
-          const PageTitleList = [];
-          const pullDeleteList = [];
-          const PageTagsList = [];
-          const PageCategoryList = [];
-          const PageYearList = [];
-          const PageAuthorList = [];
-          const PagePublisherList = [];
-          const PageTypeList = [];
-          const pullAuthorList = [];
-
-          //foreach JSON
-          jsonData.forEach(function (item, index) {
-            try {
-              if (item.type === undefined) {
-                item.type = "本";
-              }
-              //ページ作成タイトル
-              item.title = item.type + "/" + item.title;
-              PageTitleList.push("[[" + item.title + "]]\n");
-              pullDeleteList.push(item.title);
-              if (item.tags !== undefined) {
-                const tagList = item.tags.split(',');
-                tagList.forEach(function (value) {
-                  PageTagsList.push("[[" + value + "]]\n");
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error();
+                }
+                return response.json();
+              })
+              .catch((reason) => {
+                logseq.UI.showMsg("ERROR: URLを確認してください", `error`, {
+                  timeout: 6000,
                 });
-              }
-              if (item.category !== undefined) {
-                PageCategoryList.push("[[" + item.category + "]]\n");
-                item.category = "[[" + item.category + "]]";
-              }
-              if (item.year !== undefined) {
-                PageYearList.push(item.year);//later sort
-                item.year = "[[" + item.year + "]]";
-              }
-
-              if (item.author !== undefined) {
-                PageAuthorList.push("[[" + item.author + "]]\n");
-                pullAuthorList.push(item.author);
-                item.author = "[[" + item.author + "]]";
-              }
-              if (item.publisher !== undefined) {
-                PagePublisherList.push(item.publisher);
-                item.publisher = "[[出版社/" + item.publisher + "]]";
-              }
-              if (item.type !== undefined) {
-                PageTypeList.push("[[" + item.type + "]]\n");
-                item.type = "[[" + item.type + "]]";
-              }
-              if (item.end !== undefined) {
-                item.end = "[[" + item.end + "]]";
-              }
-            } finally {
-              //タグで限定する
-              //const itemTagsArray = item.tags.split(',');
-              //if (logseq.settings.limitTags !== "" && getIsDuplicate(itemTagsArray, settingTagArray) !== "") {
-
-
-              //logseq.Editor.deletePage(item.title);
-              //create page
-              logseq.Editor.createPage(item.title, item, {
-                createFirstBlock: true,
-                format: "markdown",
-                redirect: false,
-                parent: createContentTitle,
               });
-              //console.log(`create: ` + item.title);
-              //logseq.UI.showMsg(`create:` + item.title);
 
-              //} else {
-              //  タグに当てはまらないケース(作成しない)
-              //  console.log(`Non-create(limit tags): ` + createPageTitle);
-              //}
-            }
-          });//foreach done
+            console.log(`#${pluginId}: JSON import`);
 
-          //listUp
-          logseq.Editor.deletePage(createContentTitle);
-          //create page publisher
-          logseq.Editor.createPage("出版社", {
-            createFirstBlock: true,
-            format: "markdown",
-            redirect: false,
-            tags: "本",
-          });
-          /* todayDateInUserFormat Sample */
-          const userConfigs = await logseq.App.getUserConfigs();
-          const preferredDateFormat = userConfigs.preferredDateFormat;
-          const today = new Date();
-          const todayDateInUserFormat = getDateForPage(today, preferredDateFormat);
+            //console.log(`jsonData: `);
+            //console.log(jsonData);
+            //console.log(`jsonData No.0: `);
+            //console.log(jsonData[0]);
 
-          const functionCreateContentPage = async () => {
-            //create content page
-            const blockInPage = await logseq.Editor.appendBlockInPage(createContentTitle, todayDateInUserFormat + "リスト更新", { parent: "本,読書", redirect: true });
-            logseq.Editor.insertBlock(blockInPage.uuid, "タイトルリスト\n" + PageTitleList);
-            logseq.Editor.insertBlock(blockInPage.uuid, "タグ一覧\n" + [...(new Set(PageTagsList))]);
-            logseq.Editor.insertBlock(blockInPage.uuid, "カテゴリー\n" + [...(new Set(PageCategoryList))]);
-            //sort year
-            PageYearList.sort(function (first, second) {
-              return first - second;
+
+            //タグで限定する
+            //if (logseq.settings.limitTags != "") {
+            //  var settingTagArray = logseq.settings.limitTags.split(',');
+            //} else {
+            //  var settingTagArray = "";
+            //}
+
+            //console.log(`settingTagArray: ` + settingTagArray);
+
+            //list up
+            const PageTitleList = [];
+            const pullDeleteList = [];
+            const PageTagsList = [];
+            const PageCategoryList = [];
+            const PageYearList = [];
+            const PageAuthorList = [];
+            const PagePublisherList = [];
+            const PageTypeList = [];
+            const pullAuthorList = [];
+
+            //foreach JSON
+            jsonData.forEach(function (item, index) {
+              try {
+                if (item.type === undefined) {
+                  item.type = "本";
+                }
+                //ページ作成タイトル
+                item.title = item.type + "/" + item.title;
+                PageTitleList.push("[[" + item.title + "]]\n");
+                pullDeleteList.push(item.title);
+                if (item.tags !== undefined) {
+                  const tagList = item.tags.split(',');
+                  tagList.forEach(function (value) {
+                    PageTagsList.push("[[" + value + "]]\n");
+                  });
+                }
+                if (item.category !== undefined) {
+                  PageCategoryList.push("[[" + item.category + "]]\n");
+                  item.category = "[[" + item.category + "]]";
+                }
+                if (item.year !== undefined) {
+                  PageYearList.push(item.year);//later sort
+                  item.year = "[[" + item.year + "]]";
+                }
+
+                if (item.author !== undefined) {
+                  PageAuthorList.push("[[" + item.author + "]]\n");
+                  pullAuthorList.push(item.author);
+                  item.author = "[[" + item.author + "]]";
+                }
+                if (item.publisher !== undefined) {
+                  PagePublisherList.push(item.publisher);
+                  item.publisher = "[[出版社/" + item.publisher + "]]";
+                }
+                if (item.type !== undefined) {
+                  PageTypeList.push("[[" + item.type + "]]\n");
+                  item.type = "[[" + item.type + "]]";
+                }
+                if (item.end !== undefined) {
+                  item.end = "[[" + item.end + "]]";
+                }
+              } finally {
+                //タグで限定する
+                //const itemTagsArray = item.tags.split(',');
+                //if (logseq.settings.limitTags !== "" && getIsDuplicate(itemTagsArray, settingTagArray) !== "") {
+
+
+                //logseq.Editor.deletePage(item.title);
+                //create page
+                logseq.Editor.createPage(item.title, item, {
+                  createFirstBlock: true,
+                  format: "markdown",
+                  redirect: false,
+                  parent: createContentTitle,
+                });
+                //console.log(`create: ` + item.title);
+                //logseq.UI.showMsg(`create:` + item.title);
+
+                //} else {
+                //  タグに当てはまらないケース(作成しない)
+                //  console.log(`Non-create(limit tags): ` + createPageTitle);
+                //}
+              }
+            });//foreach done
+
+            //listUp
+            logseq.Editor.deletePage(createContentTitle);
+            //create page publisher
+            logseq.Editor.createPage("出版社", {
+              createFirstBlock: true,
+              format: "markdown",
+              redirect: false,
+              tags: "本",
             });
-            PageYearList.forEach((value, index) => {
-              PageYearList[index] = " [[" + value + "]] ";
-            });
-            logseq.Editor.insertBlock(blockInPage.uuid, "発行年\n" + [...(new Set(PageYearList))]);
-            logseq.Editor.insertBlock(blockInPage.uuid, "著者\n" + [...(new Set(PageAuthorList))]);
-            const pullPublisherList = [];
-            PagePublisherList.forEach((value, index) => {
-              PagePublisherList[index] = "[" + value + "](出版社/" + value + ")\n";
-              pullPublisherList.push("出版社/" + value);
-            });
-            logseq.Editor.insertBlock(blockInPage.uuid, "出版社\n" + [...(new Set(PagePublisherList))]);
-            logseq.Editor.insertBlock(blockInPage.uuid, "種別\n" + [...(new Set(PageTypeList))]);
+            /* todayDateInUserFormat Sample */
+            const userConfigs = await logseq.App.getUserConfigs();
+            const preferredDateFormat = userConfigs.preferredDateFormat;
+            const today = new Date();
+            const todayDateInUserFormat = getDateForPage(today, preferredDateFormat);
 
-            logseq.updateSettings({ listTitle: pullDeleteList, listPublisher: pullPublisherList, listAuthor: pullAuthorList });
+            const functionCreateContentPage = async () => {
+              //create content page
+              const blockInPage = await logseq.Editor.appendBlockInPage(createContentTitle, todayDateInUserFormat + "リスト更新", { parent: "本,読書", redirect: true });
+              logseq.Editor.insertBlock(blockInPage.uuid, "タイトルリスト\n" + PageTitleList);
+              logseq.Editor.insertBlock(blockInPage.uuid, "タグ一覧\n" + [...(new Set(PageTagsList))]);
+              logseq.Editor.insertBlock(blockInPage.uuid, "カテゴリー\n" + [...(new Set(PageCategoryList))]);
+              //sort year
+              PageYearList.sort(function (first, second) {
+                return first - second;
+              });
+              PageYearList.forEach((value, index) => {
+                PageYearList[index] = " [[" + value + "]] ";
+              });
+              logseq.Editor.insertBlock(blockInPage.uuid, "発行年\n" + [...(new Set(PageYearList))]);
+              logseq.Editor.insertBlock(blockInPage.uuid, "著者\n" + [...(new Set(PageAuthorList))]);
+              const pullPublisherList = [];
+              PagePublisherList.forEach((value, index) => {
+                PagePublisherList[index] = "[" + value + "](出版社/" + value + ")\n";
+                pullPublisherList.push("出版社/" + value);
+              });
+              logseq.Editor.insertBlock(blockInPage.uuid, "出版社\n" + [...(new Set(PagePublisherList))]);
+              logseq.Editor.insertBlock(blockInPage.uuid, "種別\n" + [...(new Set(PageTypeList))]);
 
-            //本のページに移動する TODO
+              logseq.updateSettings({ listTitle: pullDeleteList, listPublisher: pullPublisherList, listAuthor: pullAuthorList });
+
+              //本のページに移動する TODO
 
 
 
-            //foreach JSON end
-            console.log(`#${pluginId}: JSON import done`);
-            //logseq.updateSettings({ disabled: true });//plugin off NOT
-            logseq.UI.showMsg("書籍ページの作成が終わりました。\n\n*プラグインをオフにしてください。\n\n\n`reindex`をおこなってください。\n\n\nそのあと左メニューにある [全ページ] からページを探してください。\n\n", `success`, {
-              timeout: 30000,
-            }); //success message
+              //foreach JSON end
+              console.log(`#${pluginId}: JSON import done`);
+              //logseq.updateSettings({ disabled: true });//plugin off NOT
+              logseq.UI.showMsg("書籍ページの作成が終わりました。\n\n*プラグインをオフにしてください。\n\n\n`reindex`をおこなってください。\n\n\nそのあと左メニューにある [全ページ] からページを探してください。\n\n", `success`, {
+                timeout: 30000,
+              }); //success message
+            };
+            setTimeout(functionCreateContentPage, 500);
           };
-          setTimeout(functionCreateContentPage, 500);
-        };
-        jsonImport(settingJsonUrl);
-        console.log(`#${pluginId}: open_booklog_jp end`);
+          jsonImport(settingJsonUrl);
+          console.log(`#${pluginId}: open_booklog_jp end`);
+        }
       }
+      else {
+        logseq.UI.showMsg("キャンセルしました", `info`, {
+          timeout: 30000,
+        });
+        logseq.updateSettings({ deleteMode: "OFF" });
+        logseq.showSettingsUI();
+      }
+
     } else {
       if (settingJsonUrl === "") {
         console.log(`#${pluginId}: warning`);
@@ -272,8 +289,8 @@ const model = {
         }); //warning message
 
         const openLink = async () => {
-        logseq.App.openExternalLink('http://yu000jp.php.xdomain.jp/main/booklog/logseq/');
-        logseq.App.openExternalLink('https://booklog.jp/export');
+          logseq.App.openExternalLink('http://yu000jp.php.xdomain.jp/main/booklog/logseq/');
+          logseq.App.openExternalLink('https://booklog.jp/export');
         }
         logseq.showSettingsUI();
         setTimeout(openLink, 6000);

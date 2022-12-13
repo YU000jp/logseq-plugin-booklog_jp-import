@@ -14,7 +14,7 @@ export const settingUI = () => {
             default: "Write",
             enumChoices: ["OFF","Write","Delete"],
             enumPicker: "select",
-            title: "書き込み・削除モード",
+            title: "再書き込み・削除モード",
             description: "[Delete]を選択して📚を押すと書籍の関連ページが全部削除されます。(ジャーナルページに書いた内容は消えません)",
         },
         {
