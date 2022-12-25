@@ -1,7 +1,6 @@
 import "@logseq/libs";
 import { logseq as PL } from "../package.json";
 import { getDateForPage } from 'logseq-dateutils';
-import { settingUI } from "./setting";
 const pluginId = PL.id;
 
 function getIsDuplicate(arr1, arr2) {
@@ -10,8 +9,69 @@ function getIsDuplicate(arr1, arr2) {
 
 /* main */
 const main = () => {
-  settingUI(); /* -setting */
   console.info(`#${pluginId}: MAIN`); /* -plugin-id */
+
+  /* https://logseq.github.io/plugins/types/SettingSchemaDesc.html */
+  const settingsTemplate = [
+    {
+      key: "jsonUrl",
+      type: "string",
+      default: ``,
+      title: "変換用サイトで、コピーしたURLを貼り付けてください。",
+      description: "追加更新の方法について [空欄にしてから📚を押すと変換用サイトが開きます。そこにもう一度アップロードしてその新しいURLを貼り付けてください。次の項目で[Write]を選択して📚を押すと実行されます。既存の上書きはおこなわれません。]",
+    },
+    {
+      key: "deleteMode",
+      type: "enum",
+      default: "Write",
+      enumChoices: ["OFF", "Write", "Delete"],
+      enumPicker: "select",
+      title: "再書き込み・削除モード",
+      description: "[Delete]を選択して📚を押すと書籍の関連ページが全部削除されます。(ジャーナルページに書いた内容は消えません)",
+    },
+    {
+      key: "listTitle",
+      type: "object",
+      inputAs: "hidden",
+      default: "",
+      title: " ",
+      description: "`Edit setting.json`で作成された書籍ページの一覧をファイルで確認できます。※削除モード用のリストです。",
+    },
+    {
+      key: "listPublisher",
+      type: "object",
+      inputAs: "hidden",
+      default: null,
+      title: null,
+      description: null,
+    },
+    {
+      key: "listAuthor",
+      type: "object",
+      inputAs: "hidden",
+      default: null,
+      title: null,
+      description: null,
+    },
+  ];
+  /*JavascriptではなくPHPで処理することにした
+  , {
+              key: "limitTags",
+              type: "string",
+              default: ``,
+              title: "タグ (デフォルトは無記入)",
+              description: `コンマ「,」で区切ってタグを入力する。一致したものだけ書籍ページが作成されます。(すでに作成済みの場合は、この設定は無効です)`,
+          }
+  ,{
+      key: "limitCategory",
+      type: "string",
+      default: ``,
+      title: "カテゴリ (デフォルトは無記入)",
+      description: `コンマ「,」で区切ってカテゴリを入力する。一致したものだけ書籍ページが作成されます。(すでに作成済みの場合は、この設定は無効です)`,
+  }
+  */
+  logseq.useSettingsSchema(settingsTemplate);
+
 
   logseq.UI.showMsg(
     `ブクログ用プラグインが読み込まれました。\n\nツールバーの📚ボタンを押してください。`,
