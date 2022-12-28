@@ -11,6 +11,8 @@
 - Load a exported file and create pages. Configure page properties.
 - ブクログのファイルエクスポートを利用し、Logseqにブックリストを作成するプラグイン
 
+![1671524194426-obuckt1IHU](https://user-images.githubusercontent.com/111847207/209885720-9704c0aa-fbec-4f86-9a47-5687966a9898.png)
+
 ## プラグインをつかう手順
 
 1. Logseqマーケットプレイスからプラグインをインストールする (`booklog-jp-import`で探す)
