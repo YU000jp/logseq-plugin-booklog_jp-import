@@ -17,8 +17,8 @@ const main = () => {
       key: "jsonUrl",
       type: "string",
       default: ``,
-      title: "変換用サイトで、コピーしたURLを貼り付けてください。",
-      description: "追加更新の方法について [空欄にしてから📚を押すと変換用サイトが開きます。そこにもう一度アップロードしてその新しいURLを貼り付けてください。次の項目で[Write]を選択して📚を押すと実行されます。既存の上書きはおこなわれません。]",
+      title: "コピーしたURLを貼り付けてください。",
+      description: "追加更新の方法について [空欄にしてから📚を押すと変換用サイトが開きます。そこにもう一度アップロードして新しいURLを貼り付けてください。次の項目で[Write]を選択して📚を押すと実行されます。既存の上書きはおこなわれません。]",
     },
     {
       key: "deleteMode",
@@ -26,7 +26,7 @@ const main = () => {
       default: "Write",
       enumChoices: ["OFF", "Write", "Delete"],
       enumPicker: "select",
-      title: "再書き込み・削除モード",
+      title: "追加・削除モード",
       description: "[Delete]を選択して📚を押すと書籍の関連ページが全部削除されます。(ジャーナルページに書いた内容は消えません)",
     },
     {
@@ -72,13 +72,13 @@ const main = () => {
   */
   logseq.useSettingsSchema(settingsTemplate);
 
-
+if(logseq.settings.listTitle === ""){
   logseq.UI.showMsg(
     `ブクログ用プラグインが読み込まれました。\n\nツールバーの📚ボタンを押してください。`,
     `info`,
     { timeout: 8000 }
   ); //start message
-
+  }
 
   /* toolbarItem */
   logseq.App.registerUIItem("toolbar", {
@@ -110,13 +110,13 @@ const model = {
       if (logseq.settings.listTitle === "") {
 
         //delete mode && listTitle ""
-        logseq.UI.showMsg("削除が実行できませんでした。\n\n", `error`, {
+        /* logseq.UI.showMsg("削除が実行できませんでした。\n\n", `error`, {
           timeout: 6000,
-        });
+        }); */
         logseq.showSettingsUI();
 
       } else {
-        if (window.confirm('削除を実行しますか')) {
+        if (confirm('削除を実行しますか')) {
           try {
             logseq.UI.showMsg("削除が実行されます。\n処理が終わるまでお待ちください。\n\n", `info`);
             //delete page by title
@@ -156,7 +156,7 @@ const model = {
       /*
       create page start
       */
-      if (window.confirm('書籍ページが作成されます。実行しますか')) {
+      if (confirm('書籍ページが作成されます。実行しますか')) {
         try {
           logseq.UI.showMsg("読み込んでいます。\n処理が終わるまでお待ちください。\n\n", `info`);
           logseq.updateSettings({ deleteMode: "OFF" });
@@ -355,7 +355,7 @@ const model = {
         logseq.showSettingsUI();
         setTimeout(openLink, 6000);
       } else {
-        logseq.UI.showMsg("すでにページが作成されています。\n\n", `error`, {
+        logseq.UI.showMsg("すでに作成されています。\n\n", `error`, {
           timeout: 6000,
         });
       }
