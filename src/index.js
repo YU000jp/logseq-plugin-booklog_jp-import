@@ -126,8 +126,8 @@ const model = {
         //dialog
         logseq.showMainUI();
         swal({
-          title: "削除を実行しますか?",
-          text: "",
+          title: "実行しますか?",
+          text: "書籍ページをすべて削除します",
           icon: "info",
           buttons: true,
         })
