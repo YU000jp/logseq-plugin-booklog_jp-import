@@ -12,7 +12,8 @@
   "license": "MIT",
   "dependencies": {
     "@logseq/libs": "latest",
-    "logseq-dateutils": "^0.0.26"
+    "logseq-dateutils": "^0.0.26",
+    "sweetalert": "^2.1.2"
   },
   "logseq": {
     "id": "logseq-plugin-booklog-jp-import",
