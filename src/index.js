@@ -189,7 +189,7 @@ const model = {
       logseq.showMainUI();
       swal({
         title: "実行しますか?",
-        text: "書籍ページを作成します",
+        text: '書籍ページを作成します',
         icon: "info",
         buttons: true,
       })
@@ -346,8 +346,14 @@ const model = {
                         logseq.showMainUI();
                         swal({
                           title: "書籍ページの作成が終わりました",
-                          text: "`インデックス再構築`をおこなってください。\n\nそのあと左メニューにある [全ページ] からページを探してください。",
+                          text: 'インデックス再構築をおこなってください\n\nそのあと左メニューにある [全ページ] からページを探してください',
                           icon: "success",
+                          content: {
+                            element: 'img',
+                            attributes: {
+                              src: `https://user-images.githubusercontent.com/111847207/210157837-e359b29b-05a0-44d0-9310-915f382012d7.gif`,
+                            },
+                          }
                         })
                           .then(() => {
                             logseq.App.pushState('page', { name: createContentTitle });
