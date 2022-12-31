@@ -183,7 +183,7 @@ const model = {
       create page start
       */
 
-      const requestJsonUrl = "http://yu000jp.php.xdomain.jp/main/booklog/logseq/temp/" + settingJsonUrl;
+      const requestJsonUrl = "http://yu000jp.php.xdomain.jp/main/booklog/logseq/" + settingJsonUrl;
       //dialog
       logseq.showMainUI();
       swal({
