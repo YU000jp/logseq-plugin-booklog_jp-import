@@ -130,6 +130,7 @@ const model = {
           text: "書籍ページをすべて削除します",
           icon: "info",
           buttons: true,
+          dangerMode: true,
         })
           .then((answer) => {
             if (answer) {//OK
