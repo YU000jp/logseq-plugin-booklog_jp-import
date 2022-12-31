@@ -350,6 +350,7 @@ const model = {
                           icon: "success",
                         })
                           .then(() => {
+                            logseq.App.pushState('page', { name: createContentTitle });
                             logseq.hideMainUI();
                           });
                       }
@@ -391,6 +392,7 @@ const model = {
           logseq.hideMainUI();
         });
       } else {
+        logseq.App.pushState('page', { name: createContentTitle });
         logseq.UI.showMsg("すでに作成されています");
         logseq.updateSettings({ deleteMode: "OFF" });
         logseq.showSettingsUI();
