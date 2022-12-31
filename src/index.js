@@ -342,7 +342,6 @@ const model = {
                         logseq.updateSettings({ listTitle: pullDeleteList, listPublisher: pullPublisherList, listAuthor: pullAuthorList });
 
                       } finally {
-                        //ページを移動する TODO
                         logseq.showMainUI();
                         swal({
                           title: "書籍ページの作成が終わりました",
