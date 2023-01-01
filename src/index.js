@@ -156,12 +156,10 @@ const model = {
               } catch (err) {
                 console.log(err);
               } finally {
-                logseq.showMainUI();
+
                 swal({
                   title: "削除がおわりました",
                   text: "'reindex'をおこなってください",
-                }).then(() => {
-                  logseq.hideMainUI();
                 });
               }
             } else {//Cancel
@@ -240,67 +238,90 @@ const model = {
                           if (item.title === undefined) {
                             return;
                           }
-                          try {
-                            if (item.type === undefined) {
-                              item.type = "本";
-                            }
-                            //ページ作成タイトル
-                            item.title = item.type + "/" + item.title;
-                            PageTitleList.push("[[" + item.title + "]]\n");
-                            pullDeleteList.push(item.title);
-                            if (item.tags !== undefined) {
-                              const tagList = item.tags.split(',');
-                              tagList.forEach(function (value) {
-                                PageTagsList.push("[[" + value + "]]\n");
-                              });
-                            }
-                            if (item.category !== undefined) {
-                              PageCategoryList.push("[[" + item.category + "]]\n");
-                              item.category = "[[" + item.category + "]]";
-                            }
-                            if (item.year !== undefined) {
-                              PageYearList.push(item.year);//later sort
-                              item.year = "[[" + item.year + "]]";
-                            }
 
-                            if (item.author !== undefined) {
-                              PageAuthorList.push("[[" + item.author + "]]\n");
-                              pullAuthorList.push(item.author);
-                              item.author = "[[" + item.author + "]]";
-                            }
-                            if (item.publisher !== undefined) {
-                              PagePublisherList.push(item.publisher);
-                              item.publisher = "[[出版社/" + item.publisher + "]]";
-                            }
-                            if (item.type !== undefined) {
-                              PageTypeList.push("[[" + item.type + "]]\n");
-                              item.type = "[[" + item.type + "]]";
-                            }
-                            if (item.end !== undefined) {
-                              item.end = "[[" + item.end + "]]";
-                            }
-                          } finally {
-                            //タグで限定する
-                            //const itemTagsArray = item.tags.split(',');
-                            //if (logseq.settings.limitTags !== "" && getIsDuplicate(itemTagsArray, settingTagArray) !== "") {
-
-
-                            //logseq.Editor.deletePage(item.title);
-                            //create page
-                            logseq.Editor.createPage(item.title, item, {
-                              createFirstBlock: true,
-                              format: "markdown",
-                              redirect: false,
-                              parent: createContentTitle,
-                            });
-                            //console.log(`create: ` + item.title);
-                            //logseq.UI.showMsg(`create:` + item.title);
-
-                            //} else {
-                            //  タグに当てはまらないケース(作成しない)
-                            //  console.log(`Non-create(limit tags): ` + createPageTitle);
-                            //}
+                          if (item.type === undefined) {
+                            item.type = "本";
                           }
+                          //ページ作成タイトル
+                          item.title = item.type + "/" + item.title;
+                          PageTitleList.push("[[" + item.title + "]]\n");
+                          pullDeleteList.push(item.title);
+                          if (item.tags !== undefined) {
+                            const tagList = item.tags.split(',');
+                            tagList.forEach(function (value) {
+                              PageTagsList.push("[[" + value + "]]\n");
+                            });
+                          }
+                          if (item.category !== undefined) {
+                            PageCategoryList.push("[[" + item.category + "]]\n");
+                            item.category = "[[" + item.category + "]]";
+                          }
+                          if (item.year !== undefined) {
+                            PageYearList.push(item.year);//later sort
+                            item.year = "[[" + item.year + "]]";
+                          }
+
+                          if (item.author !== undefined) {
+                            PageAuthorList.push("[[" + item.author + "]]\n");
+                            pullAuthorList.push(item.author);
+                            item.author = "[[" + item.author + "]]";
+                          }
+                          if (item.publisher !== undefined) {
+                            PagePublisherList.push(item.publisher);
+                            item.publisher = "[[出版社/" + item.publisher + "]]";
+                          }
+                          if (item.type !== undefined) {
+                            PageTypeList.push("[[" + item.type + "]]\n");
+                            item.type = "[[" + item.type + "]]";
+                          }
+                          if (item.end !== undefined) {
+                            item.end = "[[" + item.end + "]]";
+                          }
+                          const obj = item;
+                          //タグで限定する
+                          //const itemTagsArray = item.tags.split(',');
+                          //if (logseq.settings.limitTags !== "" && getIsDuplicate(itemTagsArray, settingTagArray) !== "") {
+                          if (obj.content !== undefined) {
+                            var ItemContent = item.content;
+                            delete obj.content;
+                          }
+                          if (obj.review !== undefined) {
+                            var ItemReview = "(レビュー)\n" + item.review;
+                            delete obj.review;
+                          }
+                          if (item.memo !== undefined) {
+                            var ItemMemo = "(メモ)\n" + item.memo;
+                            delete obj.memo;
+                          }
+                          //logseq.Editor.deletePage(item.title);
+                          //create page
+                          logseq.Editor.createPage(item.title, obj, {
+                            createFirstBlock: true,
+                            format: "markdown",
+                            redirect: false,
+                            parent: createContentTitle,
+                          }).then((NewPage) => {
+                            if (NewPage) {
+                              const uuid = NewPage.uuid;
+                              if (ItemContent) {
+                                logseq.Editor.insertBlock(uuid, ItemContent);
+                              }
+                              if (ItemReview) {
+                                logseq.Editor.insertBlock(uuid, ItemReview);
+                              }
+                              if (ItemMemo) {
+                                logseq.Editor.insertBlock(uuid, ItemMemo);
+                              }
+                            }
+                          });
+                          //console.log(`create: ` + item.title);
+                          //logseq.UI.showMsg(`create:` + item.title);
+
+                          //} else {
+                          //  タグに当てはまらないケース(作成しない)
+                          //  console.log(`Non-create(limit tags): ` + createPageTitle);
+                          //}
+
                         });//foreach done
 
                         //listUp
@@ -346,7 +367,7 @@ const model = {
                         logseq.showMainUI();
                         swal({
                           title: "書籍ページの作成が終わりました",
-                          text: 'インデックス再構築をおこなってください\n\nそのあと左メニューにある [全ページ] からページを探してください',
+                          text: 'インデックス再構築をおこなってください\n\nそのあと左メニューにある [全ページ] から、書籍のタイトルページを探してください',
                           icon: "success",
                           content: {
                             element: 'img',
