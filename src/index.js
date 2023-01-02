@@ -21,16 +21,16 @@ const main = () => {
       type: "string",
       default: ``,
       title: "ファイルkeyを貼り付けてください",
-      description: "追加更新について [空欄にしてツールバーの📚を押してください。2つのサイトが開きます。そこにもう一度アップロードし、新しいファイルkeyを取得してください]",
+      description: "更新をおこなう場合は、空欄にしてツールバーの📚を押してください。2つのサイトが開きます。そこにもう一度アップロードし、新しいファイルkeyを取得してください",
     },
     {
       key: "deleteMode",
       type: "enum",
       default: "Write",
       enumChoices: ["OFF", "Write", "Delete"],
-      enumPicker: "select",
-      title: "追加・削除モード",
-      description: "[Delete]を選択して📚を押すと書籍の関連ページが全部削除されます。(ジャーナルページに書いた内容は消えません) [Write]では既存ページの上書きはおこなわれません",
+      enumPicker: "radio",
+      title: "修復・削除モード",
+      description: "[Delete]を選択して📚を押すと書籍の関連ページをすべて削除します。(ジャーナルページに書いた内容は消えません) [Write]ではタイトルページをいったん削除して、再び作成します",
     },
     {
       key: "listTitle",
@@ -127,8 +127,8 @@ const model = {
         logseq.showMainUI();
         swal({
           title: "実行しますか?",
-          text: "書籍ページをすべて削除します",
-          icon: "info",
+          text: "書籍ページをすべて削除します\n(タイトル、出版社、著者の各ページが対象)",
+          icon: "warning",
           buttons: true,
           dangerMode: true,
         })
@@ -153,10 +153,7 @@ const model = {
                 });
                 logseq.Editor.deletePage(createContentTitle);
                 logseq.updateSettings({ listTitle: "", listPublisher: "", listAuthor: "", jsonUrl: "", });//keep delete mode
-              } catch (err) {
-                console.log(err);
               } finally {
-
                 swal({
                   title: "削除がおわりました",
                   text: "'reindex'をおこなってください",
@@ -164,9 +161,7 @@ const model = {
               }
             } else {//Cancel
               //user cancel in dialog
-              logseq.UI.showMsg("キャンセルしました", `info`, {
-                timeout: 9000,
-              });
+              logseq.UI.showMsg("キャンセルしました", `warning`);
               logseq.updateSettings({ deleteMode: "OFF" });
               logseq.showSettingsUI();
             }
@@ -183,15 +178,26 @@ const model = {
       */
 
       const requestJsonUrl = "http://yu000jp.php.xdomain.jp/main/booklog/logseq/" + settingJsonUrl;
+      const setTitleList = logseq.settings.listTitle;
+      let dialogMessage;
+      let dialogIcon;
+      if (setTitleList) {
+        dialogMessage = "書籍ページをいったん削除して、もう一度作成します";
+        dialogIcon = "warning";
+      } else {
+        dialogMessage = "書籍ページを作成します";
+        dialogIcon = "info";
+      }
       //dialog
       logseq.showMainUI();
       swal({
         title: "実行しますか?",
-        text: '書籍ページを作成します',
-        icon: "info",
+        text: dialogMessage,
+        icon: dialogIcon,
         buttons: true,
       })
         .then((answer) => {
+
           if (answer) {//OK
 
             logseq.UI.showMsg("読み込んでいます\n処理が終わるまでお待ちください", `info`).then(() => {
@@ -211,7 +217,9 @@ const model = {
                     if (!response.ok) {
                       return "error";
                     }
+
                     const create = async () => {
+
                       try {
                         const jsonData = await response.json();
 
@@ -233,12 +241,12 @@ const model = {
                         const PageTypeList = [];
                         const pullAuthorList = [];
 
+
                         //foreach JSON
-                        jsonData.forEach(function (item, index) {
+                        await jsonData.forEach(async function (item, index) {
                           if (item.title === undefined) {
                             return;
                           }
-
                           if (item.type === undefined) {
                             item.type = "本";
                           }
@@ -277,25 +285,31 @@ const model = {
                           if (item.end !== undefined) {
                             item.end = "[[" + item.end + "]]";
                           }
-                          const obj = item;
+
+                          const obj = item;//オブジェクトを代入して削除できるようにする
+
                           //タグで限定する
                           //const itemTagsArray = item.tags.split(',');
                           //if (logseq.settings.limitTags !== "" && getIsDuplicate(itemTagsArray, settingTagArray) !== "") {
-                          if (obj.content !== undefined) {
+                          if (item.content !== undefined) {
                             var ItemContent = item.content;
                             delete obj.content;
                           }
-                          if (obj.review !== undefined) {
-                            var ItemReview = "(レビュー)\n" + item.review;
+                          if (item.review !== undefined) {
+                            var ItemReview = "(レビュー)\n#+BEGIN_QUOTE\n" + item.review + "\n#+END_QUOTE";
                             delete obj.review;
                           }
                           if (item.memo !== undefined) {
-                            var ItemMemo = "(メモ)\n" + item.memo;
+                            var ItemMemo = "(メモ)\n#+BEGIN_QUOTE\n" + item.memo + "\n#+END_QUOTE";
                             delete obj.memo;
                           }
-                          //logseq.Editor.deletePage(item.title);
+                          if (setTitleList.includes(item.title)) {
+                            //すでにタイトルページが存在する場合
+                            await logseq.Editor.deletePage(item.title);
+                          }
+                          //新規作成
                           //create page
-                          logseq.Editor.createPage(item.title, obj, {
+                          await logseq.Editor.createPage(item.title, obj, {
                             createFirstBlock: true,
                             format: "markdown",
                             redirect: false,
@@ -314,8 +328,7 @@ const model = {
                               }
                             }
                           });
-                          //console.log(`create: ` + item.title);
-                          //logseq.UI.showMsg(`create:` + item.title);
+
 
                           //} else {
                           //  タグに当てはまらないケース(作成しない)
@@ -395,7 +408,7 @@ const model = {
 
           } else {//Cancel
             //user cancel in dialog
-            logseq.UI.showMsg("キャンセルしました", `info`, { timeout: 30000 });
+            logseq.UI.showMsg("キャンセルしました", `warning`);
             logseq.updateSettings({ deleteMode: "OFF" });
             logseq.showSettingsUI();
           }
