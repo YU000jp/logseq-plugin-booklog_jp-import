@@ -1,13 +1,90 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script src="index.js" type="module"></script>
-  </body>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Document</title>
+	<style>
+		.file-receive-wrapper {
+			position: absolute;
+			z-index: 1;
+			background-color: #3c424b;
+			color: #f2f2f2;
+			border-radius: 6px;
+			box-shadow: 0 5px 15px 0 rgb(0 0 0 / 50%);
+		}
+
+		.file-receive-form {
+			display: flex;
+			padding: 10px;
+			flex-direction: column;
+			justify-content: center;
+		}
+
+		.file-receive-input {
+			border: 3px dashed hsla(0, 0%, 100%, 0.4);
+			border-radius: 6px;
+			padding: 20px;
+			cursor: pointer;
+		}
+
+		.file-receive-input::-webkit-file-upload-button {
+			visibility: hidden;
+			display: none;
+		}
+
+		.file-receive-input::before {
+			content: "クリックしてファイルを選択 (ドロップもしくは'Ctrl/Cmd + V'で貼り付けも可)";
+			display: block;
+			text-align: center;
+			color: #f2f2f2;
+			font-size: 1.2em;
+			font-weight: bold;
+			padding: 10px;
+			white-space: pre-wrap;
+		}
+
+		.file-receive-button {
+			text-align: center;
+			margin-top: 10px;
+			height: 35px;
+			padding: 7px 14px 10px 9px;
+			border-radius: 6px;
+			font-size: 15px;
+			font-weight: 700;
+			position: relative;
+			width: auto;
+			background-color: var(--accent-color);
+			box-shadow: 0 6px 10px 0 rgb(27 28 30 / 31%);
+			color: #f2f2f2;
+			white-space: nowrap;
+			border: none;
+			font-family: Arial, Helvetica, sans-serif;
+		}
+
+		.file-receive-button-disabled {
+			background-color: hsla(0, 0%, 100%, 0.4);
+			color: hsla(0, 0%, 100%, 0.4);
+			cursor: not-allowed;
+		}
+
+		.file-receive-message {
+			margin-top: 10px;
+			padding: 0 14px;
+			font-size: 15px;
+			font-weight: 400;
+			position: relative;
+			width: auto;
+			color: #ff5b57;
+			white-space: nowrap;
+			border: none;
+			font-family: Arial, Helvetica, sans-serif;
+		}
+	</style>
+</head>
+<body>
+	<div id="app"></div>
+	<script src="index.ts" type="module"></script>
+</body>
 </html>

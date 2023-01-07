@@ -11,7 +11,8 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@logseq/libs": "latest",
+    "@logseq/libs": "^0.0.14",
+    "csv-parse": "^5.3.3",
     "logseq-dateutils": "^0.0.26",
     "sweetalert": "^2.1.2"
   },
@@ -21,6 +22,10 @@
     "icon": "./icon.svg"
   },
   "devDependencies": {
-    "parcel": "latest"
+    "buffer": "^5.7.1",
+    "events": "^3.3.0",
+    "parcel": "^2.8.2",
+    "stream-browserify": "^3.0.0",
+    "util": "^0.12.5"
   }
 }
