@@ -455,7 +455,7 @@ const model = {
 
       logseq.UI.showMsg("サイトが開きます\n\nエクスポートをおこなってください\n(データファイルのダウンロード)", `info`, { timeout: 4000 }).then(() => {
         setTimeout(function () {
-          //logseq.App.openExternalLink('https://booklog.jp/export');
+          logseq.App.openExternalLink('https://booklog.jp/export');
         }, 4000);
         //CSV file receive
         Object.assign(container.style, { position: "fixed", top: "15px", left: "50vh" });
