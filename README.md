@@ -13,6 +13,18 @@
 
 ![1671524194426-obuckt1IHU](https://user-images.githubusercontent.com/111847207/209885720-9704c0aa-fbec-4f86-9a47-5687966a9898.png)
 
+## Release log
+
+> 2023/01/07
+> 
+> ![image](https://user-images.githubusercontent.com/111847207/211145904-b9595ae3-c33b-46f4-aaf7-fc75cbf12107.png)
+> 
+> 最新バージョン(ver.2.0.1)で手順を大きく変更しました
+>
+> Logseqの画面内でアップロードできるようになりました
+>
+>「更新を確認」を押して、プラグインの更新をおこなってください
+
 ## プラグインをつかう手順
 
 1. Logseqマーケットプレースからプラグインをインストールする (`booklog-jp-import`で探す)
