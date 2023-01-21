@@ -226,10 +226,10 @@ const main = () => {
       key: "deleteMode",
       type: "enum",
       default: "Write",
-      enumChoices: ["OFF", "Add", "Write", "Delete"],
+      enumChoices: ["OFF", "Add", "Delete"],
       enumPicker: "radio",
-      title: "追加・修復・削除モード",
-      description: "各モードを選んで📚を押すと実行します。[Add]では、ページの上書きはおこなわずに更新をおこないます。[Write]では、タイトルページをいったん削除して、再び作成します。[Delete]では、ページをすべて削除します。いずれもジャーナルページなどリンクした内容は消えません ",
+      title: "追加・削除モード",
+      description: "各モードを選んで📚を押すと実行します。[Add]では、ページの上書きはおこなわずに更新をおこないます。[Delete]では、ページをすべて削除します。いずれもジャーナルページなどリンクした内容は消えません ",
     },
     {
       key: "limitTags",
