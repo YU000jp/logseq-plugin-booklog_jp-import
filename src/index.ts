@@ -1,7 +1,7 @@
 import "@logseq/libs";
 import { SettingSchemaDesc } from "@logseq/libs/dist/LSPlugin.user";
 import { logseq as PL } from "../package.json";
-import swal from 'sweetalert';
+import swal from 'sweetalert';//https://sweetalert.js.org/guides/
 import { parse } from 'csv-parse/lib/sync';
 import { create } from "./create";
 import { getDateForPage } from 'logseq-dateutils';//https://github.com/hkgnp/logseq-dateutils
