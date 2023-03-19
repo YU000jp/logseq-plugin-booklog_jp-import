@@ -1,6 +1,28 @@
 import { getDateForPage } from 'logseq-dateutils';
 import swal from 'sweetalert';
 
+async function searchBookByISBN(isbn) {//API制限にかかる
+    const apiUrl = 'https://app.rakuten.co.jp/services/api/BooksBook/Search/20170404';
+    const params = {
+        format: 'json',
+        isbn,
+        elements: 'mediumImageUrl,affiliateUrl',
+        affiliateId: '30c0276b.32e8a4ed.30c0276c.b21dc4e8',
+        applicationId: '1032240167590752216'
+    };
+    try {
+        const response = await fetch(`${apiUrl}?${new URLSearchParams(params)}`);
+        const data = await response.json();
+        const items = data.Items;
+        const item = items[0].Item;
+        console.log(item.mediumImageUrl);
+        console.log(item.affiliateUrl);
+        return item;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
 
 export const create = async (itemsObj, UserSettings, preferredDateFormat, createContentTitle) => {
 
@@ -47,9 +69,13 @@ export const create = async (itemsObj, UserSettings, preferredDateFormat, create
             }
 
             //book-cover image & link
-            let ItemContent;
+            let ItemContent = "";
+            if (item['isbn'] !== undefined) {
+                ItemContent = "https://cover.openbd.jp/" + item['isbn'] + ".jpg\n";
+                delete item['isbn'];
+            }
             if (item["item-code"]) {
-                ItemContent = "http://images-jp.amazon.com/images/P/" + item['item-code'] + ".09.MZZZZZZZ.jpg\n[amazon.co.jp](https://www.amazon.co.jp/dp/" + item['item-code'] + "/tag=y0skyblue-22) | [booklog.jp](https://booklog.jp/item/1/" + item['item-code'] + ")";
+                ItemContent = await ItemContent + "[amazon.co.jp](https://www.amazon.co.jp/dp/" + item['item-code'] + "/tag=y0skyblue-22) | [booklog.jp](https://booklog.jp/item/1/" + item['item-code'] + ")";
                 delete item["item-code"];
             }
             if (item["page-number"]) {

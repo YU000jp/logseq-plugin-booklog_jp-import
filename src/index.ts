@@ -1,15 +1,14 @@
 import "@logseq/libs";
 import { SettingSchemaDesc } from "@logseq/libs/dist/LSPlugin.user";
 import { logseq as PL } from "../package.json";
+const pluginId = PL.id;
 import swal from 'sweetalert';//https://sweetalert.js.org/guides/
 import { parse } from 'csv-parse/lib/sync';
 import { create } from "./create";
 import { getDateForPage } from 'logseq-dateutils';//https://github.com/hkgnp/logseq-dateutils
 
-const pluginId = PL.id;
+
 const createContentTitle = "ブクログのリスト";
-
-
 
 
 //https://www.dkrk-blog.net/javascript/duplicate_an_array
@@ -19,8 +18,7 @@ function getIsDuplicate(arr1, arr2) {
 }
 
 
-
-//https://github.com/hserranome/logseq-imgur-upload
+//Credit: https://github.com/hserranome/logseq-imgur-upload
 
 const createDomElements = (container) => {
   // Create HTML form
@@ -91,7 +89,7 @@ async function postData(formData, button) {
             //file load success
             file_reader.onload = async function (e) {
               //1行目を追加
-              const header = "none,item-code,ISBN,category,valuation,status,review,tags,memo,start,end,title,author,publisher,year,type,page-number\n";
+              const header = "none,item-code,isbn,category,valuation,status,review,tags,memo,start,end,title,author,publisher,year,type,page-number\n";
               //https://csv.js.org/
               const items = await parse((header + file_reader.result).replace(/""/g, ''), {
                 columns: true,
@@ -128,7 +126,6 @@ async function postData(formData, button) {
 
                   delete items[index].valuation;
                   delete items[index].none;
-                  delete items[index].ISBN;
                   delete items[index].status;
                   if (item.memo === "") {
                     delete items[index].memo;
