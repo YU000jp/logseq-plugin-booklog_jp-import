@@ -5,26 +5,12 @@
 [![latest release version](https://img.shields.io/github/v/release/YU000jp/logseq-plugin-booklog-jp-import)](https://github.com/YU000jp/logseq-plugin-booklog-jp-import/releases)
 [![License](https://img.shields.io/github/license/YU000jp/logseq-plugin-booklog-jp-import?color=blue)](https://github.com/YU000jp/logseq-plugin-booklog-jp-import/blob/main/LICENSE)
 
-## what can  do
-
-- This plugin processes the content of data exported by [`booklog.jp`](https://booklog.jp/). it's a site from Japan.
+- This plugin processes the content of data exported by [`booklog.jp`](https://booklog.jp/). (The site from Japan)
 - Load a exported file and create pages. Configure page properties.
 - ブクログのエクスポートファイルををもとに、まとめて書籍のタイトルページを作成するプラグイン
 > 自動同期ではありません。ブクログから手動でダウンロードする必要があります。そのファイルを読み取り、書籍データを取り込みます
 
 ![1671524194426-obuckt1IHU](https://user-images.githubusercontent.com/111847207/209885720-9704c0aa-fbec-4f86-9a47-5687966a9898.png)
-
-## Release log
-
-> 2023/01/07
-> 
-> ![image](https://user-images.githubusercontent.com/111847207/211145904-b9595ae3-c33b-46f4-aaf7-fc75cbf12107.png)
-> 
-> 最新バージョン(ver.2.0.1)で手順を大きく変更しました
->
-> Logseqの画面内でアップロードできるようになりました
->
->「更新を確認」を押して、プラグインの更新をおこなってください
 
 ## インストールと使い方
 
