@@ -10,6 +10,7 @@
 - This plugin processes the content of data exported by [`booklog.jp`](https://booklog.jp/). it's a site from Japan.
 - Load a exported file and create pages. Configure page properties.
 - ブクログのエクスポートファイルををもとに、まとめて書籍のタイトルページを作成するプラグイン
+> 自動同期ではありません。ブクログから手動でダウンロードする必要があります。そのファイルを読み取り、書籍データを取り込みます
 
 ![1671524194426-obuckt1IHU](https://user-images.githubusercontent.com/111847207/209885720-9704c0aa-fbec-4f86-9a47-5687966a9898.png)
 
@@ -56,10 +57,6 @@
 - `ブクログのリスト`というページに、ページリストが表示されます
 
 - 各タイトルページ (`本/タイトル`のような形式)
-
-### 注意事項
-
-- 自動同期ではありません。ブクログから手動でダウンロードする必要があります。ファイルを読み取り、そのデータを取り込みます
 
 ### データベースの情報について
 
