@@ -1,4 +1,4 @@
-# logseq-plugin-booklog-jp-import
+# Logseq Plugin: booklog-jp-import
 
 - Create a booklist by import from <https://booklog.jp/>
 
