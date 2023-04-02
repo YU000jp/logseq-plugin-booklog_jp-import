@@ -44,7 +44,6 @@ const handleClose = (e) => {
 
 
 async function postData(formData, button) {
-  const UserSettings: any = await logseq.settings;
   try {
     button.disabled = true;
     button.innerText = "Uploading...";
@@ -53,10 +52,10 @@ async function postData(formData, button) {
 
     let dialogMessage;
     let dialogIcon;
-    if (UserSettings.deleteMode === "Add") {
+    if (logseq.settings?.deleteMode === "Add") {
       dialogMessage = "書籍ページを追加します(上書きはおこなわれません)";
       dialogIcon = "info";
-    } else if (UserSettings.listTitle) {
+    } else if (logseq.settings?.listTitle) {
       dialogMessage = "書籍ページをいったん削除して、もう一度作成します";
       dialogIcon = "warning";
     } else {
@@ -104,8 +103,8 @@ async function postData(formData, button) {
                 await items.forEach(function (item, index) {
 
                   //タグとカテゴリの指定
-                  if (UserSettings.limitTags !== "") {
-                    const duplicate = getIsDuplicate(item.tags.split(','), UserSettings.limitTags.split(',')) || undefined;
+                  if (logseq.settings?.limitTags !== "") {
+                    const duplicate = getIsDuplicate(item.tags.split(','), logseq.settings?.limitTags.split(',')) || undefined;
                     if (duplicate) {
                       //
                     } else {
@@ -113,8 +112,8 @@ async function postData(formData, button) {
                       return;
                     }
                   }
-                  if (UserSettings.limitCategory !== "") {
-                    const duplicate = getIsDuplicate(item.category.split(','), UserSettings.limitCategory.split(',')) || undefined;
+                  if (logseq.settings?.limitCategory !== "") {
+                    const duplicate = getIsDuplicate(item.category.split(','), logseq.settings?.limitCategory.split(',')) || undefined;
                     if (duplicate) {
                       //
                     } else {
@@ -173,7 +172,7 @@ async function postData(formData, button) {
                 });//forEach end
               } finally {
                 //await console.log(items);
-                await create(items, UserSettings, preferredDateFormat, createContentTitle);
+                await create(items, preferredDateFormat, createContentTitle);
               }
               logseq.updateSettings({ deleteMode: "OFF" });
             };
@@ -210,12 +209,8 @@ const checkFileIsValid = (file) => {
 };
 
 
-
-
-
 /* main */
 const main = () => {
-  const UserSettings: any = logseq.settings;
   console.info(`#${pluginId}: MAIN`); /* -plugin-id */
   /* https://logseq.github.io/plugins/types/SettingSchemaDesc.html */
   const settingsTemplate: SettingSchemaDesc[] = [
@@ -262,7 +257,7 @@ const main = () => {
 
   logseq.useSettingsSchema(settingsTemplate);
 
-  if (!UserSettings.listTitle) {
+  if (!logseq.settings?.listTitle) {
     logseq.showMainUI();
     swal({
       title: "📚 プラグインが読み込まれました",
@@ -280,7 +275,7 @@ const main = () => {
         content: {
           element: "input",
           attributes: {
-            value: UserSettings.limitTags,
+            value: logseq.settings?.limitTags,
           },
         },
       }).then((tag) => {
@@ -293,7 +288,7 @@ const main = () => {
           content: {
             element: "input",
             attributes: {
-              value: UserSettings.limitCategory,
+              value: logseq.settings?.limitCategory,
             },
           },
         }).then((category) => {
@@ -324,14 +319,11 @@ const main = () => {
   /* toolbar open_booklog_jp */
   logseq.App.registerUIItem("toolbar", {
     key: pluginId,
-    template: `<div data-on-click="open_booklog_jp" style="font-size:20px">📚</div>`,
+    template: `<div data-on-click="openBooklogJp" style="font-size:20px">📚</div>`,
   }); /* For open_booklog_jp */
 
   console.info(`#${pluginId}: loaded`);
 }; /* end_main */
-
-
-
 
 
 let elementsCreated = false;
@@ -380,16 +372,12 @@ const initUpload = () => {
 const model = {
 
   //click toolbar
-  open_booklog_jp() {
-    const UserSettings: any = logseq.settings;
-    console.info(`#${pluginId}: open_booklog_jp`);
-
-
-    if (UserSettings.deleteMode === "Delete") {
+  openBooklogJp() {
+    if (logseq.settings?.deleteMode === "Delete") {
       /*
       delete mode
       */
-      if (UserSettings.listTitle === "") {
+      if (logseq.settings?.listTitle === "") {
         //タイトルリストが見つからない
         logseq.showSettingsUI();
       } else {
@@ -405,17 +393,17 @@ const model = {
           },
           dangerMode: true,
         })
-          .then((answer) => {
+          .then(async(answer) => {
             if (answer) {//OK
 
-              logseq.UI.showMsg("読み込んでいます\n処理が終わるまでお待ちください", `info`).then(() => {
+              await logseq.UI.showMsg("読み込んでいます\n処理が終わるまでお待ちください", `info`).then(() => {
                 //delete page by title
-                const deleteObjTitle = UserSettings.listTitle;
+                const deleteObjTitle = logseq.settings?.listTitle;
                 deleteObjTitle.forEach(function (value) {
                   logseq.Editor.deletePage(value);
                 });
                 //delete page by publisher
-                const deleteObjAuthor = UserSettings.listAuthor;
+                const deleteObjAuthor = logseq.settings?.listAuthor;
                 deleteObjAuthor.forEach(function (value) {
                   logseq.Editor.deletePage(value);
                 });
@@ -448,9 +436,9 @@ const model = {
         //dialog end
         logseq.updateSettings({ deleteMode: "OFF" });
       }
-    } else if (UserSettings.deleteMode === "Add" || UserSettings.deleteMode === "Write" || UserSettings.listTitle === "") {
+    } else if (logseq.settings?.deleteMode === "Add" || logseq.settings?.deleteMode === "Write" || logseq.settings?.listTitle === "") {
 
-      logseq.UI.showMsg("サイトが開きます\n\nエクスポートをおこなってください\n(データファイルのダウンロード)", `info`, { timeout: 4000 }).then(() => {
+      logseq.UI.showMsg("サイトが開きます\n\nCSVファイルのダウンロードをおこなってください", `info`, { timeout: 4000 }).then(() => {
         setTimeout(function () {
           logseq.App.openExternalLink('https://booklog.jp/export');
         }, 4000);
@@ -469,4 +457,4 @@ const model = {
   }
 };
 
-logseq.ready(model).then(main).catch(console.error);
+logseq.ready(model, main).catch(console.error);

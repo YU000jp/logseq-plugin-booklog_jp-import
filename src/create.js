@@ -1,214 +1,150 @@
+import "@logseq/libs";
 import { getDateForPage } from 'logseq-dateutils';
 import swal from 'sweetalert';
 
-async function searchBookByISBN(isbn) {//API制限にかかる
-    const apiUrl = 'https://app.rakuten.co.jp/services/api/BooksBook/Search/20170404';
-    const params = {
-        format: 'json',
-        isbn,
-        elements: 'mediumImageUrl,affiliateUrl',
-        affiliateId: '30c0276b.32e8a4ed.30c0276c.b21dc4e8',
-        applicationId: '1032240167590752216'
-    };
-    try {
-        const response = await fetch(`${apiUrl}?${new URLSearchParams(params)}`);
-        const data = await response.json();
-        const items = data.Items;
-        const item = items[0].Item;
-        console.log(item.mediumImageUrl);
-        console.log(item.affiliateUrl);
-        return item;
-    } catch (error) {
-        console.error(error);
-        return null;
-    }
-}
+export const create = async (itemsObj, preferredDateFormat, createContentTitle) => {
+    // list up
+    const PageTitleList = [];
+    const pullDeleteList = [];
+    const PageTagsList = [];
+    const PageCategoryList = [];
+    const PageYearList = [];
+    const PageAuthorList = [];
+    const PageTypeList = [];
+    const pullAuthorList = [];
+    const PageReviewList = [];
+    const PageMemoList = [];
 
-export const create = async (itemsObj, UserSettings, preferredDateFormat, createContentTitle) => {
+    // create promises
+    const promises = itemsObj.map(async (item) => {
+        const { type, title, tags, category, author, isbn, 'item-code': itemCode, 'page-number': pageNumber, year, review, memo } = item;
+        if (type) {
+            item.title = `${type}/${title}`;
+            PageTypeList.push(`[[${type}]]\n`);
+            delete item.type;
+        }
 
-    try {
-        //list up
-        const setTitleList = UserSettings.listTitle;
-        const PageTitleList = [];
-        const pullDeleteList = [];
-        const PageTagsList = [];
-        const PageCategoryList = [];
-        const PageYearList = [];
-        const PageAuthorList = [];
-        const PageTypeList = [];
-        const pullAuthorList = [];
-        const PageReviewList = [];
-        const PageMemoList = [];
-        //foreach
-        await itemsObj.forEach(async function (item, index) {
+        PageTitleList.push(`[[${title}]]\n`);
+        pullDeleteList.push(title);
 
-            if (item.type) {
-                item.title = item.type + "/" + item.title;
-                PageTypeList.push("[[" + item.type + "]]\n");
-                delete item.type;
-            }
+        if (tags) {
+            const tagList = tags.split(',');
+            tagList.forEach((v) => {
+                PageTagsList.push(`[[${v}]]\n`);
+            });
+        }
+        if (category) {
+            PageCategoryList.push(`[[${category}]]\n`);
+            item.category = `[[${category}]]`;
+        }
 
-            PageTitleList.push("[[" + item.title + "]]\n");
-            pullDeleteList.push(item.title);
+        if (author) {
+            PageAuthorList.push(`${author}\n`);
+            pullAuthorList.push(author);
+        }
 
-            if (item.tags) {
-                const tagList = item.tags.split(',');
-                tagList.forEach(function (v) {
-                    PageTagsList.push("[[" + v + "]]\n");
-                });
-            }
-            if (item.category) {
-                PageCategoryList.push("[[" + item.category + "]]\n");
-                item.category = "[[" + item.category + "]]";
-            }
+        // book-cover image & link
+        let ItemContent = '';
+        if (isbn !== undefined) {
+            ItemContent = `https://cover.openbd.jp/${isbn}.jpg\n`;
+            delete item.isbn;
+        }
+        if (itemCode) {
+            ItemContent += `[amazon.co.jp](https://www.amazon.co.jp/dp/${itemCode}/tag=y0skyblue-22) | [booklog.jp](https://booklog.jp/item/1/${itemCode})`;
+            delete item['item-code'];
+        }
+        if (pageNumber) {
+            ItemContent += ` | ${pageNumber}ページ`;
+            delete item['page-number'];
+        }
+        if (year) {
+            PageYearList.push(year); // later sort
+            ItemContent += ` | [[${year}]]年発行`;
+            delete item.year;
+        }
+        let ItemReview;
+        if (review) {
+            ItemReview = `(レビュー)\n#+BEGIN_QUOTE\n${review}\n#+END_QUOTE`;
+            PageReviewList.push(`[[${title}]]\n`);
+            delete item.review;
+        }
+        let ItemMemo;
+        if (memo) {
+            ItemMemo = `(メモ)\n#+BEGIN_QUOTE\n${memo}\n#+END_QUOTE`;
+            PageMemoList.push(`[[${title}]]\n`);
+            delete item.memo;
+        }
 
-            if (item.author) {
-                PageAuthorList.push("[[" + item.author + "]]\n");
-                pullAuthorList.push(item.author);
-                item.author = "[[" + item.author + "]]";
-            }
-
-            //book-cover image & link
-            let ItemContent = "";
-            if (item['isbn'] !== undefined) {
-                ItemContent = "https://cover.openbd.jp/" + item['isbn'] + ".jpg\n";
-                delete item['isbn'];
-            }
-            if (item["item-code"]) {
-                ItemContent = await ItemContent + "[amazon.co.jp](https://www.amazon.co.jp/dp/" + item['item-code'] + "/tag=y0skyblue-22) | [booklog.jp](https://booklog.jp/item/1/" + item['item-code'] + ")";
-                delete item["item-code"];
-            }
-            if (item["page-number"]) {
-                ItemContent = ItemContent + " | " + item["page-number"] + "ページ";
-                delete item["page-number"];
-            }
-            if (item.year) {
-                PageYearList.push(item.year);//later sort
-                ItemContent = ItemContent + " | [[" + item.year + "]]年発行";
-                delete item.year;
-            }
-            let ItemReview;
-            if (item.review) {
-                ItemReview = "(レビュー)\n#+BEGIN_QUOTE\n" + item.review + "\n#+END_QUOTE";
-                PageReviewList.push("[[" + item.title + "]]\n");
-                delete item.review;
-            }
-            let ItemMemo;
-            if (item.memo) {
-                ItemMemo = "(メモ)\n#+BEGIN_QUOTE\n" + item.memo + "\n#+END_QUOTE";
-                PageMemoList.push("[[" + item.title + "]]\n");
-                delete item.memo;
-            }
-
-
-            if (UserSettings.deleteMode === "Add") {
-                await logseq.get.Editor.getPage(item.title).catch((getPage) => {
-                    if (getPage) {
-                        //
-                    } else {
-                        //create page
-                        logseq.Editor.createPage(item.title, item, {
-                            createFirstBlock: true,
-                            format: "markdown",
-                            redirect: false,
-                            parent: createContentTitle,
-                        }).then((NewPage) => {
-                            if (NewPage) {
-                                const uuid = NewPage.uuid;
-                                if (ItemContent) {
-                                    logseq.Editor.insertBlock(uuid, ItemContent);
-                                }
-                                if (ItemReview) {
-                                    logseq.Editor.insertBlock(uuid, ItemReview);
-                                }
-                                if (ItemMemo) {
-                                    logseq.Editor.insertBlock(uuid, ItemMemo);
-                                }
-                            }
-                        });
-                    }
-                });
-            } else {
-                if (setTitleList.includes(item.title)) {
-                    //すでにタイトルページが存在する場合
-                    await logseq.Editor.deletePage(item.title);
-                }
-                //新規作成
-                //create page
-                await logseq.Editor.createPage(item.title, item, {
+        if (logseq.settings?.deleteMode === 'Add') {
+            const page = await logseq.Editor.getPage(title).catch(() => null);
+            if (!page) {
+                // create page
+                const NewPage = await logseq.Editor.createPage(title, item, {
                     createFirstBlock: true,
-                    format: "markdown",
+                    format: 'markdown',
                     redirect: false,
                     parent: createContentTitle,
-                }).then((NewPage) => {
-                    if (NewPage) {
-                        const uuid = NewPage.uuid;
-                        if (ItemContent) {
-                            logseq.Editor.insertBlock(uuid, ItemContent);
-                        }
-                        if (ItemReview) {
-                            logseq.Editor.insertBlock(uuid, ItemReview);
-                        }
-                        if (ItemMemo) {
-                            logseq.Editor.insertBlock(uuid, ItemMemo);
-                        }
+                });
+                if (NewPage) {
+                    const { uuid } = NewPage;
+                    if (ItemContent) {
+                        await logseq.Editor.insertBlock(uuid, ItemContent);
                     }
-                });
+                    if (ItemReview) {
+                        await logseq.Editor.insertBlock(uuid, ItemReview);
+                    }
+                    if (ItemMemo) {
+                        await logseq.Editor.insertBlock(uuid, ItemMemo);
+                    }
+                }
             }
+        }
+    });
 
-        });//foreach done
+    await Promise.all(promises);
 
-
-        //create content page
-        await logseq.Editor.deletePage(createContentTitle);
-        await logseq.Editor.createPage(createContentTitle).then((e) => {
-
-            logseq.Editor.appendBlockInPage(e.uuid, (getDateForPage(new Date(), preferredDateFormat)) + "リスト更新", { parent: "本,読書" }).then((blockInPage) => {
-                const uuid = blockInPage.uuid;
-                logseq.Editor.insertBlock(uuid, "タイトルリスト\n" + PageTitleList);
-                logseq.Editor.insertBlock(uuid, "タグ一覧\n" + [...(new Set(PageTagsList))]);
-                logseq.Editor.insertBlock(uuid, "カテゴリー\n" + [...(new Set(PageCategoryList))]);
-                //sort year
-                PageYearList.sort(function (first, second) {
-                    return first - second;
-                });
-                PageYearList.forEach((value, index) => {
-                    PageYearList[index] = " [[" + value + "]] ";
-                });
-                logseq.Editor.insertBlock(uuid, "発行年\n" + [...(new Set(PageYearList))]);
-                logseq.Editor.insertBlock(uuid, "著者\n" + [...(new Set(PageAuthorList))]);
-                logseq.Editor.insertBlock(uuid, "種別\n" + [...(new Set(PageTypeList))]);
-                if (PageReviewList) {
-                    logseq.Editor.insertBlock(uuid, "レビューあり\n" + [...(new Set(PageReviewList))]);
-                }
-                if (PageMemoList) {
-                    logseq.Editor.insertBlock(uuid, "メモあり\n" + [...(new Set(PageMemoList))]);
-                }
-            });
-        });
-
-        logseq.updateSettings({ listTitle: pullDeleteList, listAuthor: pullAuthorList });
-
-    } finally {
-        logseq.showMainUI();
-        setTimeout(function () {
-            swal({
-                title: "書籍ページの作成が終わりました",
-                text: 'インデックス再構築をおこなってください\n\nそのあと左メニューにある [全ページ] から、書籍のタイトルページを探してください',
-                icon: "success",
-                content: {
-                    element: 'img',
-                    attributes: {
-                        src: `https://user-images.githubusercontent.com/111847207/210157837-e359b29b-05a0-44d0-9310-915f382012d7.gif`,
-                    },
-                }
-            }).then(() => {
-                setTimeout(function () {
-                    logseq.App.pushState('page', { name: createContentTitle });
-                }, 50);
-                logseq.hideMainUI();
-            });
-        }, 100);
+    // create content page
+    await logseq.Editor.deletePage(createContentTitle);
+    const contentPage = await logseq.Editor.createPage(createContentTitle);
+    const { uuid: contentUuid } = contentPage;
+    const blocks = [
+        `${getDateForPage(new Date(), preferredDateFormat)}リスト更新`,
+        `タイトルリスト\n${PageTitleList.join('')}`,
+        `タグ一覧\n${[...(new Set(PageTagsList))].join('')}`,
+        `カテゴリー\n${[...(new Set(PageCategoryList))].join('')}`,
+        `発行年\n${[...(new Set(PageYearList.sort((a, b) => a - b)))].map((v) => ` [[${v}]] `).join('')}`,
+        `著者\n${[...(new Set(PageAuthorList))].join('')}`,
+        `種別\n${[...(new Set(PageTypeList))].join('')}`,
+    ];
+    if (PageReviewList.length) {
+        blocks.push(`レビューあり\n${[...(new Set(PageReviewList))].join('')}`);
     }
+    if (PageMemoList.length) {
+        blocks.push(`メモあり\n${[...(new Set(PageMemoList))].join('')}`);
+    }
+    blocks.forEach((block) => logseq.Editor.appendBlockInPage(contentUuid, block, { parent: '本,読書' }));
 
+    // update settings
+    logseq.updateSettings({ listTitle: pullDeleteList, listAuthor: pullAuthorList });
+
+    // show success message and redirect to content page
+    setTimeout(() => {
+        swal({
+            title: '書籍ページの作成が終わりました',
+            text:
+                'インデックス再構築をおこなってください\n\nそのあと左メニューにある [全ページ] から、書籍のタイトルページを探してください',
+            icon: 'success',
+            content: {
+                element: 'img',
+                attributes: {
+                    src: `https://user-images.githubusercontent.com/111847207/210157837-e359b29b-05a0-44d0-9310-915f382012d7.gif`,
+                },
+            },
+        }).then(() => {
+            setTimeout(() => {
+                logseq.App.pushState('page', { name: createContentTitle });
+            }, 50);
+            logseq.hideMainUI();
+        });
+    }, 100);
 };
