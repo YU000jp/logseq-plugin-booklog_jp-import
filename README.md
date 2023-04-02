@@ -52,6 +52,8 @@
 
 - [Rakuten-books](https://github.com/YU000jp/logseq-plugin-rakuten-books)
 
+- [Column Layout](https://github.com/YU000jp/Logseq-column-Layout)
+
 - [Panel Coloring](https://github.com/YU000jp/logseq-plugin-panel-coloring)
 
 - [Page-tags and Hierarchy](https://github.com/YU000jp/logseq-page-tags-and-hierarchy)
