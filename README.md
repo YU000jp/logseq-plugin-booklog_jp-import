@@ -53,7 +53,7 @@
 ### Other my plugins
 
 - [Rakuten-books](https://github.com/YU000jp/logseq-plugin-rakuten-books) 楽天ブックスのデータベースから選んで書籍情報を取り込むプラグイン
-- [SomeMenuExtemder](https://github.com/YU000jp/logseq-plugin-some-menu-extender) URLを自動リンクにするなど、いくつかのオプション機能をもつコマンド系プラグイン
+- [SomeMenuExtender](https://github.com/YU000jp/logseq-plugin-some-menu-extender) URLを自動リンクにするなど、いくつかのオプション機能をもつコマンド系プラグイン
 - [Column Layout](https://github.com/YU000jp/Logseq-column-Layout) 右側のスペースに、Linked Referencesとジャーナルクエリーを設置するためのUI系プラグイン
 - [panel coloring](https://github.com/YU000jp/logseq-plugin-panel-coloring) 各ページごとに色の指定ができるプラグイン
 - [page-tags and hierarchy](https://github.com/YU000jp/logseq-page-tags-and-hierarchy) ページタグやHierarchy(ページ名の階層)を右側や下に表示するためのUI系プラグイン
