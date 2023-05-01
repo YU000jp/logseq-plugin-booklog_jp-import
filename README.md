@@ -50,16 +50,17 @@
 
 - ブクログから手動エクスポートした書籍情報を利用します。発売日などの項目は確定情報とは異なる場合があります
 
-### Other my plugins
+## My plugins
 
-- [Rakuten-books](https://github.com/YU000jp/logseq-plugin-rakuten-books) 楽天ブックスのデータベースから選んで書籍情報を取り込むプラグイン
+- [Weekdays and Holidays (Templates)](https://github.com/YU000jp/logseq-plugin-weekdays-and-weekends) 平日と休日のジャーナルテンプレートを分けるためのプラグイン
+- [Sticky Popup](https://github.com/YU000jp/logseq-plugin-sticky-popup) 選択したテキストをポップアップに表示させておくことができるプラグイン
 - [SomeMenuExtender](https://github.com/YU000jp/logseq-plugin-some-menu-extender) URLを自動リンクにするなど、いくつかのオプション機能をもつコマンド系プラグイン
-- [Column Layout](https://github.com/YU000jp/Logseq-column-Layout) 右側のスペースに、Linked Referencesとジャーナルクエリーを設置するためのUI系プラグイン
-- [panel coloring](https://github.com/YU000jp/logseq-plugin-panel-coloring) 各ページごとに色の指定ができるプラグイン
-- [page-tags and hierarchy](https://github.com/YU000jp/logseq-page-tags-and-hierarchy) ページタグやHierarchy(ページ名の階層)を右側や下に表示するためのUI系プラグイン
-
+- [Column Layout (UI)](https://github.com/YU000jp/Logseq-column-Layout) 右側のスペースに、Linked Referencesとジャーナルクエリーを設置するためのUI系プラグイン
+- [Panel Coloring (Color)](https://github.com/YU000jp/logseq-plugin-panel-coloring) 各ページごとに色の指定ができるプラグイン
+- [Page-tags and Hierarchy (UI)](https://github.com/YU000jp/logseq-page-tags-and-hierarchy) ページタグやHierarchy(ページ名の階層)を右側や下に表示するためのUI系プラグイン
+- [Rakuten-books](https://github.com/YU000jp/logseq-plugin-rakuten-books) 楽天ブックスや楽天Koboのデータベースを検索し、Logseqにタイトルページを作成するプラグイン
+- [booklog-jp-import](https://github.com/YU000jp/logseq-plugin-booklog-jp-import) 書籍情報をブクログから一括で取り込むプラグイン
 
 ### Credit
 
-- <https://github.com/hkgnp/logseqplugin-basic-template>
 - [icooon-mono.com](https://icooon-mono.com/11122-%e3%81%88%e3%82%93%e3%81%b4%e3%81%a4%e4%bb%98%e3%81%8d%e3%81%ae%e3%83%8e%e3%83%bc%e3%83%88%e3%82%a2%e3%82%a4%e3%82%b3%e3%83%b3/)
