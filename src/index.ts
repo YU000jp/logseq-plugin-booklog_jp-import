@@ -317,10 +317,10 @@ const main = () => {
   }
 
   /* toolbar open_booklog_jp */
-  logseq.App.registerUIItem("toolbar", {
-    key: pluginId,
-    template: `<div data-on-click="openBooklogJp" style="font-size:20px">📚</div>`,
-  }); /* For open_booklog_jp */
+    logseq.App.registerUIItem('toolbar', {
+      key: pluginId,
+      template: `<div><a class="button icon" data-on-click="openBooklogJp" style="font-size: 19px">📚</a></div>`,
+    });
 
   console.info(`#${pluginId}: loaded`);
 }; /* end_main */
