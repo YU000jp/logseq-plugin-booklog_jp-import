@@ -2,7 +2,8 @@
 
 - Create a booklist by import from <https://booklog.jp/>
 
-> ⚠️非推奨 書影カバー画像が取得できないことが多くなってしまいました。その代替手段が見つかりません。現在は一部、カバー画像なしでの利用になります。
+⚠️非推奨
+> > 書影カバー画像が取得できないことが多くなってしまいました。その代替手段が見つかりません。現在は一部、カバー画像なしでの利用になります。
 
 [![latest release version](https://img.shields.io/github/v/release/YU000jp/logseq-plugin-booklog-jp-import)](https://github.com/YU000jp/logseq-plugin-booklog-jp-import/releases)
 [![License](https://img.shields.io/github/license/YU000jp/logseq-plugin-booklog-jp-import?color=blue)](https://github.com/YU000jp/logseq-plugin-booklog-jp-import/blob/main/LICENSE)
