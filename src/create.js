@@ -132,7 +132,7 @@ export const create = async (itemsObj, preferredDateFormat, createContentTitle) 
         swal({
             title: '書籍ページの作成が終わりました',
             text:
-                'インデックス再構築をおこなってください\n\nそのあと左メニューにある [全ページ] から、書籍のタイトルページを探してください',
+                'インデックス再構築をおこなってください\n\nそのあと左メニューにある [全ページ] から、書籍名ページを探してください',
             icon: 'success',
             content: {
                 element: 'img',
