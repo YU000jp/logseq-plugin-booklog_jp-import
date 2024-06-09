@@ -12,6 +12,7 @@ export const deletePages = async (): Promise<void> => {
 
   await logseq.Editor.deletePage(createContentTitle)
   logseq.updateSettings({ listTitle: "", listAuthor: "", })
+  
 }
 
 export const deleteMode = async () => {

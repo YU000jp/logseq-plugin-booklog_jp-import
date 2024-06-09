@@ -21,10 +21,13 @@ export async function postData(formData, button) {
     button.innerText = "Uploading..."
     button.classList.add("file-receive-button-disabled")
 
-    let dialogMessage
-    let dialogIcon
+    let dialogMessage = ""
+    let dialogIcon = ""
     if (logseq.settings?.deleteMode === "Add") {
       dialogMessage = "書籍ページを追加します(上書きはおこなわれません)"
+      dialogIcon = "info"
+    }else if (logseq.settings?.deleteMode === "Update") {
+      dialogMessage = "書籍ページを修復します(更新)"
       dialogIcon = "info"
     } else
       if (logseq.settings?.listTitle) {
@@ -185,10 +188,11 @@ const loadCsvFile = async (formData: any) => {
   //CSVデータをオブジェクトにする
   //file load success
   file_reader.onload = async function (e) {
-    //1行目を追加
-    const header = "none,item-code,isbn,category,valuation,status,review,tags,memo,start,end,title,author,publisher,year,type,page-number\n"
     //https://csv.js.org/
-    const items = await parse((header + file_reader.result).replace(/""/g, ''), {
+    const items = await parse((
+      "none,item-code,isbn,category,valuation,status,review,tags,memo,start,end,title,author,publisher,year,type,page-number\n"//1行目を追加
+      + file_reader.result
+    ).replace(/""/g, ''), {
       columns: true,
       trim: true,
     })
