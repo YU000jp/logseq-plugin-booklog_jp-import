@@ -1,4 +1,5 @@
 import { container, postData } from "."
+import "@logseq/libs"
 let elementsCreated = false
 
 //Credit: https://github.com/hserranome/logseq-imgur-upload

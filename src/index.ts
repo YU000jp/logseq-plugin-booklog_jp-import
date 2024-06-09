@@ -1,42 +1,34 @@
 import "@logseq/libs"
-import { AppUserConfigs } from "@logseq/libs/dist/LSPlugin.user"
-import { parse } from 'csv-parse/lib/sync'
-import { getDateForPage } from 'logseq-dateutils' //https://github.com/hkgnp/logseq-dateutils
 import swal from 'sweetalert' //https://sweetalert.js.org/guides/
 import { logseq as PL } from "../package.json"
-import { create } from "./create"
 import { deleteMode } from './deletePages'
 import { csvFileReceive } from './fileReceive'
-import { getIsDuplicate } from './lib'
 import { existPage, userCancelInDialog } from './msg'
 import { settingsTemplate } from './settings'
+import { loadCsvFile } from "./loadCsvFile"
 const pluginId = PL.id
 export const createContentTitle = "ブクログのリスト"
 export const container = document.createElement("div") as HTMLDivElement
 
-
-export async function postData(formData, button) {
+export const postData = async (formData, button) => {
   try {
     button.disabled = true
     button.innerText = "Uploading..."
     button.classList.add("file-receive-button-disabled")
 
     let dialogMessage = ""
-    let dialogIcon = ""
-    if (logseq.settings?.deleteMode === "Add") {
+    let dialogIcon = "info"
+    if (logseq.settings?.deleteMode === "Add")
       dialogMessage = "書籍ページを追加します(上書きはおこなわれません)"
-      dialogIcon = "info"
-    }else if (logseq.settings?.deleteMode === "Update") {
-      dialogMessage = "書籍ページを修復します(更新)"
-      dialogIcon = "info"
-    } else
-      if (logseq.settings?.listTitle) {
-        dialogMessage = "書籍ページをいったん削除して、もう一度作成します"
-        dialogIcon = "warning"
-      } else {
-        dialogMessage = "書籍ページを作成します"
-        dialogIcon = "info"
-      }
+    else
+      if (logseq.settings?.deleteMode === "Update")
+        dialogMessage = "書籍ページを修復します(更新)"
+      else
+        if (logseq.settings?.listTitle) {
+          dialogMessage = "書籍ページをいったん削除して、もう一度作成します"
+          dialogIcon = "warning"
+        } else
+          dialogMessage = "書籍ページを作成します"
 
     //dialog
     await logseq.showMainUI()
@@ -50,19 +42,13 @@ export async function postData(formData, button) {
       },
     })
       .then(async (answer) => {
-
-        if (answer) {//OK
-          const msg = await logseq.UI.showMsg("読み込んでいます\n処理が終わるまでお待ちください", `info`)
-          await loadCsvFile(formData)//CSVファイルの読み込み
-          logseq.UI.closeMsg(msg)
-          logseq.UI.showMsg("処理が終わりました", `success`, { timeout: 3000 })
-        } else //Cancel
-          //user cancel in dialog
-          userCancelInDialog()
-        logseq.updateSettings({ deleteMode: "OFF" })
+        if (answer) //OK
+          await loadCsvFile(formData) //load csv file
+        else //Cancel
+          userCancelInDialog()//user cancel in dialog
       })
     //dialog end
-
+    logseq.updateSettings({ deleteMode: "OFF" })
 
   } catch (err) {
     console.log(err)
@@ -146,12 +132,14 @@ const main = () => {
 
 
   const docApp = document.getElementById("app") as HTMLDivElement | null
-  if (docApp && container) {
+  if (docApp
+    && container) {
     docApp.appendChild(container)
     container.classList.add("file-receive-wrapper")
   }
 
 } /* end_main */
+
 
 const model = {
 
@@ -161,13 +149,14 @@ const model = {
       deleteMode()
     else
       if (logseq.settings?.deleteMode === "Add"
-        || logseq.settings?.deleteMode === "Write"
+        || logseq.settings?.deleteMode === "Update"
         || logseq.settings?.listTitle === "") {
 
         logseq.UI.showMsg("サイトが開きます\n\nCSVファイルのダウンロードをおこなってください", `info`, { timeout: 4000 }).then(() => {
           setTimeout(function () {
             logseq.App.openExternalLink('https://booklog.jp/export')
           }, 4000)
+
           //CSV file receive
           csvFileReceive()
         })
@@ -177,102 +166,6 @@ const model = {
         existPage()
       }
 
-  }
-}
-
-
-const loadCsvFile = async (formData: any) => {
-  const { preferredDateFormat } = await logseq.App.getUserConfigs() as { preferredDateFormat: AppUserConfigs["preferredDateFormat"] }//日付のユーザーフォーマット取得
-  const file_reader = new FileReader()
-  file_reader.readAsText(formData, "Shift-JIS")
-  //CSVデータをオブジェクトにする
-  //file load success
-  file_reader.onload = async function (e) {
-    //https://csv.js.org/
-    const items = await parse((
-      "none,item-code,isbn,category,valuation,status,review,tags,memo,start,end,title,author,publisher,year,type,page-number\n"//1行目を追加
-      + file_reader.result
-    ).replace(/""/g, ''), {
-      columns: true,
-      trim: true,
-    })
-
-    try {
-      //forEach
-      items.forEach(function (item, index) {
-
-        //タグとカテゴリの指定
-        if (logseq.settings?.limitTags !== "") {
-          const duplicate = getIsDuplicate(item.tags.split(','), (logseq.settings?.limitTags as string).split(',')) || undefined
-          if (duplicate) {
-            //
-          } else {
-            delete items[index]
-            return
-          }
-        }
-        if (logseq.settings?.limitCategory !== "") {
-          const duplicate = getIsDuplicate(item.category.split(','), (logseq.settings?.limitCategory as string).split(',')) || undefined
-          if (duplicate) {
-            //
-          } else {
-            delete items[index]
-            return
-          }
-        }
-        //end
-        delete items[index].valuation
-        delete items[index].none
-        delete items[index].status
-        if (item.memo === "")
-          delete items[index].memo
-
-        if (item.review === "")
-          delete items[index].review
-
-        if (item.year === "")
-          delete items[index].year
-
-        if (item.start === "")
-          delete items[index].start
-
-        if (item.end === "")
-          delete items[index].end
-
-        if (item.author === "")
-          delete items[index].author
-
-        if (item["page-number"] === "")
-          delete items[index]["page-number"]
-
-        if (item.title !== "") {
-          items[index].title = item.title.replace(/\[/g, '「')
-          items[index].title = item.title.replace(/\]/g, '」')
-          items[index].title = item.title.replace(/\//g, '')
-          items[index].title = item.title.replace(/-/g, '')
-          items[index].title = item.title.replaceAll("/", '／')
-        }
-        if (item.start !== "") {
-          //https://www.tohoho-web.com/js/date.htm
-          items[index].start = getDateForPage(new Date(item.start), preferredDateFormat) //remove time
-          if (item.start === "[[NaN/aN/aN]]")
-            delete items[index].start
-        }
-        if (item.end !== "") {
-          items[index].end = getDateForPage(new Date(item.end), preferredDateFormat) //remove time
-          if (item.end === "[[NaN/aN/aN]]")
-            delete items[index].end
-          if (item.start !== ""
-            && item.end === item.start)
-            delete items[index].start
-        }
-
-      }) //forEach end
-    } finally {
-      //await console.log(items);
-      await create(items, preferredDateFormat, createContentTitle)
-    }
-    logseq.updateSettings({ deleteMode: "OFF" })
   }
 }
 

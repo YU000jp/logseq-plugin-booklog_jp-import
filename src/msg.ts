@@ -1,3 +1,4 @@
+import "@logseq/libs"
 export function existPage() {
   logseq.UI.showMsg("すでに作成されています")
   logseq.showSettingsUI()

@@ -4,9 +4,8 @@ import { getDateForPage } from 'logseq-dateutils'
 import swal from 'sweetalert'
 import { checkItem } from "./checkItem"
 
-export const create = async (itemsObj, preferredDateFormat, createContentTitle) => {
+export const create = async (itemsObj, preferredDateFormat, createContentTitle): Promise<void> => {
     // list up
-    const PageTitleList: string[] = []
     const pullDeleteList: string[] = []
     const PageTagsList: string[] = []
     const PageCategoryList: string[] = []
@@ -16,14 +15,24 @@ export const create = async (itemsObj, preferredDateFormat, createContentTitle) 
     const pullAuthorList: string[] = []
     const PageReviewList: string[] = []
     const PageMemoList: string[] = []
-
+    const msg = await logseq.UI.showMsg("読み込んでいます\n処理が終わるまでお待ちください", `info`, { timeout: 1000 * 60 * 10 }) //10分
     // create promises
-    await Promise.all(checkItem(itemsObj, PageTypeList, PageTitleList, pullDeleteList, PageTagsList, PageCategoryList, PageAuthorList, pullAuthorList, PageYearList, PageReviewList, PageMemoList))
-
-    await makeContentPage(createContentTitle, preferredDateFormat, PageTitleList, PageTagsList, PageCategoryList, PageYearList, PageAuthorList, PageTypeList, PageReviewList, PageMemoList)
+    await new Promise<void>(async (resolve) => {
+        await checkItem(itemsObj, PageTypeList, pullDeleteList, PageTagsList, PageCategoryList, PageAuthorList, pullAuthorList, PageYearList, PageReviewList, PageMemoList)
+        await new Promise((resolve) => setTimeout(resolve, 2000)) // 2000ms wait
+        console.log('checkItem done')
+        await makeContentPage(createContentTitle, preferredDateFormat, PageTagsList, PageCategoryList, PageYearList, PageAuthorList, PageTypeList, PageReviewList, PageMemoList)
+        console.log('makeContentPage done')
+        resolve()
+    })
+    logseq.UI.closeMsg(msg)
+    await logseq.UI.showMsg("処理が終わりました", `success`, { timeout: 3000 })
 
     // update settings
-    logseq.updateSettings({ listTitle: pullDeleteList, listAuthor: pullAuthorList })
+    logseq.updateSettings({
+        listTitle: pullDeleteList,
+        listAuthor: pullAuthorList
+    })
 
     // show success message and redirect to content page
 
@@ -40,49 +49,40 @@ export const create = async (itemsObj, preferredDateFormat, createContentTitle) 
         },
     }).then(() => {
         setTimeout(() =>
-            logseq.App.pushState('page', { name: createContentTitle })
+            logseq.App.pushState(
+                'page',
+                { name: createContentTitle }
+            )
             , 50)
         logseq.hideMainUI()
     })
 }
 
-export const deleteBlockAndInsert = async (
-    PageEntity: { uuid: PageEntity["uuid"] },
-    ItemContent: string,
-    ItemReview: string | undefined,
-    ItemMemo: string | undefined,
-    title: string
-) => {
-    const blocks = await logseq.Editor.getPageBlocksTree(PageEntity.uuid) as { uuid: BlockEntity["uuid"] }[]
-    
-    for (const block of blocks)
-        await logseq.Editor.deleteBlock(block.uuid)
-
-    await insertBlocks(ItemContent, PageEntity.uuid, ItemReview, ItemMemo)
-    console.log(`ページを更新しました: ${title}`)
-}
-
 export const createBookPage = async (
-    title: string, item: {},
+    title: string,
+    item: any,
     ItemContent: string,
     ItemReview: string | undefined,
     ItemMemo: string | undefined
-) => {
+): Promise<void> => {
     const newPageEntity = await logseq.Editor.createPage(title, item, {
         createFirstBlock: true,
         format: 'markdown',
         redirect: false,
     }) as { uuid: PageEntity["uuid"] } | null
-    
     if (newPageEntity)
-        await insertBlocks(ItemContent, newPageEntity.uuid, ItemReview, ItemMemo)
+        await insertBlocks(
+            ItemContent,
+            newPageEntity.uuid,
+            ItemReview,
+            ItemMemo
+        )
     console.log(`ページを作成しました: ${title}`)
 }
 
 const makeContentPage = async (
     createContentTitle: string,
     preferredDateFormat: string,
-    PageTitleList: string[],
     PageTagsList: string[],
     PageCategoryList: string[],
     PageYearList: string[],
@@ -93,15 +93,13 @@ const makeContentPage = async (
 ) => {
     let contentPageUuid = ''
     const getContentPage = await logseq.Editor.getPage(createContentTitle) as { uuid: PageEntity["uuid"] } | null
-    if (getContentPage) { //ページが存在する場合はブロックをすべて削除
-        
-        const blocks = await logseq.Editor.getPageBlocksTree(getContentPage.uuid) as { uuid: BlockEntity["uuid"] }[]
-        for (const block of blocks)
-            await logseq.Editor.deleteBlock(block.uuid)
+    if (getContentPage) {
+        //ページが存在する場合はブロックをすべて削除
+        for (const block of (await logseq.Editor.getPageBlocksTree(getContentPage.uuid) as { uuid: BlockEntity["uuid"] }[]))
+            await logseq.Editor.removeBlock(block.uuid)
         contentPageUuid = getContentPage.uuid
-
-    } else { //ページが存在しない場合は作成
-
+    } else {
+        //ページが存在しない場合は作成
         const contentPage = await logseq.Editor.createPage(createContentTitle) as { uuid: PageEntity["uuid"] } | null
         if (!contentPage) {
             console.error('Failed to create content page')
@@ -109,15 +107,13 @@ const makeContentPage = async (
             return
         }
         contentPageUuid = contentPage.uuid
-        
     }
 
     const contents = [
         `${getDateForPage(new Date(), preferredDateFormat)}リスト更新`,
-        `タイトルリスト\n${PageTitleList.join('')}`,
         `タグ一覧\n${[...(new Set(PageTagsList))].join('')}`,
         `カテゴリー\n${[...(new Set(PageCategoryList))].join('')}`,
-        `発行年\n${[...(new Set(PageYearList.sort()))].join('')}`,
+        `発行年\n${[...(new Set(PageYearList.map(Number).sort((a, b) => a - b)))].map((v) => ` [[${v}]] `).join('')}`,
         `著者\n${[...(new Set(PageAuthorList))].join('')}`,
         `種別\n${[...(new Set(PageTypeList))].join('')}`,
     ]
@@ -128,10 +124,8 @@ const makeContentPage = async (
         contents.push(`メモあり\n${[...(new Set(PageMemoList))].join('')}`)
 
     for (const blockContent of contents)
-        logseq.Editor.appendBlockInPage(
-            contentPageUuid,
-            blockContent,
-            { properties: { parent: '本,読書' } })
+        logseq.Editor.appendBlockInPage(contentPageUuid, blockContent)
+    console.log(`コンテンツページを作成しました: ${createContentTitle}`)
 }
 
 const insertBlocks = async (
@@ -139,13 +133,13 @@ const insertBlocks = async (
     uuid: PageEntity["uuid"],
     ItemReview: string | undefined,
     ItemMemo: string | undefined
-) => {
-    if (ItemContent)
-        await logseq.Editor.insertBlock(uuid, ItemContent)
-
-    if (ItemReview)
-        await logseq.Editor.insertBlock(uuid, ItemReview)
-
-    if (ItemMemo)
-        await logseq.Editor.insertBlock(uuid, ItemMemo)
+): Promise<void> => {
+    const contentBlock = await logseq.Editor.appendBlockInPage(uuid, ItemContent) as { uuid: BlockEntity["uuid"] } | null
+    if (contentBlock) {
+        if (ItemReview !== undefined)
+            await logseq.Editor.insertBlock(contentBlock.uuid, ItemReview)
+        if (ItemMemo !== undefined)
+            await logseq.Editor.insertBlock(contentBlock.uuid, ItemMemo)
+        console.log(`ブロックを追加しました: ${uuid}`)
+    }
 }

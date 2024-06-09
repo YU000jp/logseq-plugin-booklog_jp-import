@@ -1,9 +1,10 @@
 import swal from "sweetalert"
 import { createContentTitle } from "."
 import { userCancelInDialog } from "./msg"
+import "@logseq/libs"
 
 export const deletePages = async (): Promise<void> => {
-  
+
   for (const value of (logseq.settings?.listTitle as string[]))
     await logseq.Editor.deletePage(value)
 
@@ -12,7 +13,7 @@ export const deletePages = async (): Promise<void> => {
 
   await logseq.Editor.deletePage(createContentTitle)
   logseq.updateSettings({ listTitle: "", listAuthor: "", })
-  
+
 }
 
 export const deleteMode = async () => {
@@ -33,7 +34,7 @@ export const deleteMode = async () => {
     })
       .then(async (answer) => {
         if (answer) { //OK
-          const msg = await logseq.UI.showMsg("読み込んでいます\n処理が終わるまでお待ちください", `info`)
+          const msg = await logseq.UI.showMsg("読み込んでいます\n処理が終わるまでお待ちください", `info`, { timeout: 1000 * 60 * 10 })
           await deletePages()
           logseq.UI.closeMsg(msg)
           logseq.UI.showMsg("削除されました。\nre-indexをおこなってください。", "info", { timeout: 5000 })
