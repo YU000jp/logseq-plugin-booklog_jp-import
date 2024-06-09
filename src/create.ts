@@ -15,14 +15,19 @@ export const create = async (itemsObj, preferredDateFormat, createContentTitle):
     const pullAuthorList: string[] = []
     const PageReviewList: string[] = []
     const PageMemoList: string[] = []
+    const isbnList: string[] = []
     const msg = await logseq.UI.showMsg("読み込んでいます\n処理が終わるまでお待ちください", `info`, { timeout: 1000 * 60 * 10 }) //10分
     // create promises
     await new Promise<void>(async (resolve) => {
-        await checkItem(itemsObj, PageTypeList, pullDeleteList, PageTagsList, PageCategoryList, PageAuthorList, pullAuthorList, PageYearList, PageReviewList, PageMemoList)
+        await checkItem(itemsObj, PageTypeList, pullDeleteList, PageTagsList, PageCategoryList, PageAuthorList, pullAuthorList, PageYearList, PageReviewList, PageMemoList, isbnList)
         await new Promise((resolve) => setTimeout(resolve, 2000)) // 2000ms wait
         console.log('checkItem done')
         await makeContentPage(createContentTitle, preferredDateFormat, PageTagsList, PageCategoryList, PageYearList, PageAuthorList, PageTypeList, PageReviewList, PageMemoList)
         console.log('makeContentPage done')
+        //ISBN Listをコンソールに一覧表示
+        console.log("ISBN List:")
+        console.log(isbnList)
+        console.log("ISBN List: End")
         resolve()
     })
     logseq.UI.closeMsg(msg)

@@ -13,7 +13,8 @@ export const checkItem = async (
     pullAuthorList: string[],
     PageYearList: string[],
     PageReviewList: string[],
-    PageMemoList: string[]
+    PageMemoList: string[],
+    isbnList: string[]
 ): Promise<void> => {
     for (const item of itemsObj) {
         const {
@@ -80,6 +81,7 @@ export const checkItem = async (
             // ItemContent = `https://cover.openbd.jp/${isbn}.jpg\n` // 画像取得できなくなった
             await new Promise((resolve) => setTimeout(resolve, 1200)) // 1200ms wait
             item.cover = await getCoverFileFromIsbn(isbn, title)
+            isbnList.push(isbn)
             delete item.isbn
         }
         // link
