@@ -2,16 +2,15 @@
 
 - Create a booklist by import from <https://booklog.jp/>
 
-⚠️非推奨
-> > 書影カバー画像が取得できないことが多くなってしまいました。その代替手段が見つかりません。現在は一部、カバー画像なしでの利用になります。
+⚠️書影カバー画像の取得が難しくなりました。
 
 [![latest release version](https://img.shields.io/github/v/release/YU000jp/logseq-plugin-booklog-jp-import)](https://github.com/YU000jp/logseq-plugin-booklog-jp-import/releases)
 [![License](https://img.shields.io/github/license/YU000jp/logseq-plugin-booklog-jp-import?color=blue)](https://github.com/YU000jp/logseq-plugin-booklog-jp-import/blob/main/LICENSE)
 
 - This plugin processes the content of data exported by [`booklog.jp`](https://booklog.jp/). (The site from Japan)
 - Load a exported file and create pages. Configure page properties.
-- ブクログのエクスポートファイルををもとに、まとめて書籍名のページを作成するプラグインです。
-> 自動同期ではありません。ブクログから手動でダウンロードする必要があります。そのファイルを読み取り、書籍データを取り込みます
+- ブクログのエクスポートファイルををもとに、一度にまとめて書籍ページを作成するプラグインです。
+> 自動同期ではありません。ブクログから必要なデータの入ったファイルを手動でダウンロードする必要があります。Logseqで、そのファイルを読み取ります。
 
 ![1671524194426-obuckt1IHU](https://user-images.githubusercontent.com/111847207/209885720-9704c0aa-fbec-4f86-9a47-5687966a9898.png)
 
