@@ -14,11 +14,8 @@ export const getCoverFileFromIsbn = async (isbn: string, title: string): Promise
         const selectedBook = data.items.find((item) =>// 選択された書籍の情報を取得
             item.volumeInfo.industryIdentifiers[1]!.identifier === isbn // ISBN-13
             || item.volumeInfo.industryIdentifiers[0]!.identifier === isbn)  // ISBN-10
-        if (!selectedBook) {
-            console.log("No match found")
-            return propertyCover
-        }
-        if (selectedBook.volumeInfo.imageLinks
+        if (selectedBook
+            && selectedBook.volumeInfo.imageLinks
             && selectedBook.volumeInfo.imageLinks.thumbnail) {
             const storage = logseq.Assets.makeSandboxStorage() as IAsyncStorage
             let name = title + ".jpg" //For Google Books API
