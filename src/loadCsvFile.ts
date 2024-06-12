@@ -67,6 +67,7 @@ export const loadCsvFile = async (formData: any): Promise<void> => {
         items[index].title = item.title.replace(/\]/g, '」')
         items[index].title = item.title.replace(/-/g, '')
         items[index].title = item.title.replaceAll("/", ' ')
+        items[index].title = item.title.replace(/\?/g, '？')//?を？に変換
       }
 
       if (item.start) {
