@@ -52,7 +52,6 @@ export const checkItem = async (
             console.log(`ページが存在します: ${title}`)
             continue
         }
-        console.log(`データチェック1件開始: ${title}`)
 
         if (type) {
             item.title = `${type}/${title}`
@@ -116,7 +115,7 @@ export const checkItem = async (
             delete item.memo
         }
 
-        console.log(`データチェック1件完了:`)
+        console.log("データチェックOK")
 
         if ((logseq.settings?.deleteMode === "Update"
             || logseq.settings?.deleteMode === "OFF")

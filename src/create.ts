@@ -26,7 +26,7 @@ export const create = async (itemsObj, preferredDateFormat, createContentTitle):
         console.log('makeContentPage done')
         //ISBN Listをコンソールに一覧表示
         console.log("ISBN List:")
-        console.log(isbnList)
+        console.log(isbnList.map((isbn) => isbn + "\n").join(''))
         console.log("ISBN List: End")
         resolve()
     })
@@ -116,11 +116,11 @@ const makeContentPage = async (
 
     const contents = [
         `${getDateForPage(new Date(), preferredDateFormat)}リスト更新`,
+        `種別\n${[...(new Set(PageTypeList))].join('')}`,
         `タグ一覧\n${[...(new Set(PageTagsList))].join('')}`,
         `カテゴリー\n${[...(new Set(PageCategoryList))].join('')}`,
         `発行年\n${[...(new Set(PageYearList.map(Number).sort((a, b) => a - b)))].map((v) => ` [[${v}]] `).join('')}`,
         `著者\n${[...(new Set(PageAuthorList))].join('')}`,
-        `種別\n${[...(new Set(PageTypeList))].join('')}`,
     ]
     if (PageReviewList.length)
         contents.push(`レビューあり\n${[...(new Set(PageReviewList))].join('')}`)

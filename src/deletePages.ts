@@ -12,7 +12,10 @@ export const deletePages = async (): Promise<void> => {
     await logseq.Editor.deletePage(value)
 
   await logseq.Editor.deletePage(createContentTitle)
-  logseq.updateSettings({ listTitle: "", listAuthor: "", })
+  logseq.updateSettings({
+    listTitle: "",
+    listAuthor: "",
+  })
 
 }
 
