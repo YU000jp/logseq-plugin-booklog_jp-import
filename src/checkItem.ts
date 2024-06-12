@@ -2,6 +2,7 @@ import { PageEntity } from "@logseq/libs/dist/LSPlugin.user"
 import { createBookPage } from "./create"
 import { getCoverFileFromIsbn } from "./lib"
 import "@logseq/libs"
+import { IAsyncStorage } from "@logseq/libs/dist/modules/LSPlugin.Storage"
 
 export const checkItem = async (
     itemsObj: any,
@@ -16,6 +17,7 @@ export const checkItem = async (
     PageMemoList: string[],
     isbnList: string[]
 ): Promise<void> => {
+    const storage = logseq.Assets.makeSandboxStorage() as IAsyncStorage
     for (const item of itemsObj) {
         const {
             type,
@@ -80,7 +82,9 @@ export const checkItem = async (
             && isbn.match(/^\d{10}$|^\d{13}$/)) {
             // ItemContent = `https://cover.openbd.jp/${isbn}.jpg\n` // 画像取得できなくなった
             await new Promise((resolve) => setTimeout(resolve, 1200)) // 1200ms wait
-            item.cover = await getCoverFileFromIsbn(isbn, title)
+            item.cover = await getCoverFileFromIsbn(isbn, title, storage)
+            if (item.cover === "")
+                delete item.cover
             isbnList.push(isbn)
             delete item.isbn
         }
