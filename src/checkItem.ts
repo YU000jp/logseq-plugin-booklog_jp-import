@@ -121,9 +121,8 @@ export const checkItem = async (
             || logseq.settings?.deleteMode === "OFF")
             && PageEntity) {
             await logseq.Editor.deletePage(PageEntity.uuid) // "Update" or "OFF" かつ ページが存在する場合
-            console.log(`ページを削除しました: (${PageEntity.uuid})`)
+            console.log(`ページを一旦削除しました: (${PageEntity.uuid})`)
             await new Promise((resolve) => setTimeout(resolve, 100))//100ms wait
-            console.log(`ページを更新しました: ${item.title}`)
         }
         await createBookPage(item.title, item, ItemContent, ItemReview, ItemMemo) // "Add" もしくは ページが存在しない場合
 

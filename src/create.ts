@@ -21,9 +21,7 @@ export const create = async (itemsObj, preferredDateFormat, createContentTitle):
     await new Promise<void>(async (resolve) => {
         await checkItem(itemsObj, PageTypeList, pullDeleteList, PageTagsList, PageCategoryList, PageAuthorList, pullAuthorList, PageYearList, PageReviewList, PageMemoList, isbnList)
         await new Promise((resolve) => setTimeout(resolve, 2000)) // 2000ms wait
-        console.log('checkItem done')
         await makeContentPage(createContentTitle, preferredDateFormat, PageTagsList, PageCategoryList, PageYearList, PageAuthorList, PageTypeList, PageReviewList, PageMemoList)
-        console.log('makeContentPage done')
         //ISBN Listをコンソールに一覧表示
         console.log("ISBN List:")
         console.log(isbnList.map((isbn) => isbn + "\n").join(''))
@@ -44,7 +42,7 @@ export const create = async (itemsObj, preferredDateFormat, createContentTitle):
     await swal({
         title: '書籍ページの作成が終わりました',
         text:
-            'インデックス再構築をおこなってください\n\nそのあと左メニューにある [全ページ] から、書籍名ページを探してください',
+            'インデックス再構築をおこなってください\n\nそのあと左メニューにある [全ページ] から、書籍ページを探してください',
         icon: 'success',
         content: {
             element: 'img',
