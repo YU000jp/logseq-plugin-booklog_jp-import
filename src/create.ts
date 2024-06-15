@@ -83,6 +83,22 @@ export const createBookPage = async (
     console.log(`ページを作成しました: ${title}`)
 }
 
+const insertBlocks = async (
+    ItemContent: string,
+    uuid: PageEntity["uuid"],
+    ItemReview: string | undefined,
+    ItemMemo: string | undefined
+): Promise<void> => {
+    const contentBlock = await logseq.Editor.appendBlockInPage(uuid, ItemContent) as { uuid: BlockEntity["uuid"] } | null
+    if (contentBlock) {
+        if (ItemReview !== undefined)
+            await logseq.Editor.insertBlock(contentBlock.uuid, ItemReview)
+        if (ItemMemo !== undefined)
+            await logseq.Editor.insertBlock(contentBlock.uuid, ItemMemo)
+        console.log(`ブロックを追加しました: ${uuid}`)
+    }
+}
+
 const makeContentPage = async (
     createContentTitle: string,
     preferredDateFormat: string,
@@ -129,20 +145,4 @@ const makeContentPage = async (
     for (const blockContent of contents)
         logseq.Editor.appendBlockInPage(contentPageUuid, blockContent)
     console.log(`コンテンツページを作成しました: ${createContentTitle}`)
-}
-
-const insertBlocks = async (
-    ItemContent: string,
-    uuid: PageEntity["uuid"],
-    ItemReview: string | undefined,
-    ItemMemo: string | undefined
-): Promise<void> => {
-    const contentBlock = await logseq.Editor.appendBlockInPage(uuid, ItemContent) as { uuid: BlockEntity["uuid"] } | null
-    if (contentBlock) {
-        if (ItemReview !== undefined)
-            await logseq.Editor.insertBlock(contentBlock.uuid, ItemReview)
-        if (ItemMemo !== undefined)
-            await logseq.Editor.insertBlock(contentBlock.uuid, ItemMemo)
-        console.log(`ブロックを追加しました: ${uuid}`)
-    }
 }
